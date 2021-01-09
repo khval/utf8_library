@@ -1,0 +1,24 @@
+delete package/#? all
+
+copy UTF8.ReadMe Package
+
+; SDK
+makedir package/SDK
+makedir package/SDK/include
+makedir package/SDK/include/include_h
+copy include package/SDK/include/include_h all
+
+; Autodocs
+makedir package/SDK/Autodocs
+copy Autodocs package/SDK/Autodocs
+
+; LIBS
+makedir package/Libs
+copy UTF8.library package/Libs
+
+; Tests
+makedir package/tests
+copy tests package/tests
+
+Delete RAM:UTF8_Library.lha
+lha -er a RAM:UTF8_Library.lha package

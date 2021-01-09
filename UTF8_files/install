@@ -1,0 +1,9 @@
+
+; SDK
+copy include SDK:include/include_h all
+
+; Autodocs
+copy Autodocs sdk:Documentation/AutoDocs all
+
+; LIBS
+copy UTF8.library Libs:

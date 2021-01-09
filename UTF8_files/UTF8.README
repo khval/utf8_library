@@ -1,0 +1,94 @@
+
+Short:	Encode/Decode or manipulate UTF8 text strings.
+Author:	Kjetil Hvalstrand
+Version:	6
+Requires:	AmigaOS4.X
+
+Description:
+
+	UTF8.library is a new library for working whit UTF8 strings. 
+	It was created because there was a need for a safe and easy to use library
+
+Content:
+
+	*	UTF8.Library
+	*	SDK header files for C and C++
+	*	Autodocs.
+	* 	Tests / examples.
+
+Requirements:
+
+	DOS.Library version 53 (newer version might work, depends on DOS.library).
+	If you don't have correct DOS.library version UTF8.library can't open.
+
+Known issues:
+
+	UTF8->Printf() is not included in the C++ class yet.
+	
+License:
+
+	Currently close source, none commercial software, (Freeware).
+
+Distribution:
+
+	You can distribute or bundle this library whit your software, but please include the README.
+
+Warning: 
+
+	This is Library is under development things might change, 
+	or not be backwards compatible, it has not been tested a lot, 
+	some unknown bugs might exist.
+
+	Send a PM on www.Amigans.net / LiveForIt if you find bugs.
+
+Alternatives:
+
+*	According to Trixie iconv is not straightforward to use. 
+
+*	According to Joerg Storohmayer there is nothing in Codesets.library, 
+	AmigaOS does not already support.
+
+Changes:
+
+14.02.2016 -- version 6
+
+	Added: TextUTF8(), TextUTF8N(), TextUTF8Extent(), TextUTF8ExtentN()
+	Added: TextUTF8Length(), TextUTF8LengthN(), DecodeN()
+	Changed all functions to use AllocVecTags().
+	Fixed: some functions did not use mem_flags correct.
+	Updated autodocs.
+
+21.03.2013 -- version 5
+
+	Added: ModLeft(), ModRight(), ModTrim(), ModInsert(), ModRemove(), ModSubString()
+	Added: CaseCmp(),Cmp(), FindGlyph(),Copy()
+	Changed: Decode(),Encode() so Codeset_page is first for consistency.
+	Changed: ToUpper(), ToLower() ModToUpper(), ModToLower() so utf8_alphabet is first for consistency.
+	Updated inline4/UTF8.h
+	Updated C++/UTF8.h (Work in progress)
+	More tests / examples.
+
+17.03.2013 -- Version 4
+
+	Added: Left(), Right(), Trim(), Insert(), Remove(), GetOffset(), 
+	Added: Merge(), ModToLower(), ModToUpper()
+	Changed: ToLower(), ToUpper() Now they copy the result, not replace the input, and you need a memory flag.
+	Updated inline4/UTF8.h
+	Updated C++/UTF8.h (Work in progress)
+	Updated Autodocs.
+	More tests / examples.
+
+15.03.2013 -- Version 3
+
+	Added IndexOf(), Printf(), GetSize()
+	Changed: SubString(), Decode(), Encode() now has memory flag argument.
+	Updated Autodocs.
+	More tests / examples.
+
+10.03.2013 -- Version 2
+
+	Added SubString(), ToUpper(), ToLower().
+	Updated Autodocs.
+	More tests / examples.
+
+09.03.2013 -- Version 1.

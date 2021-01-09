@@ -1,0 +1,1226 @@
+TABLE OF CONTENTS
+
+UTF8.library/CaseCmp
+UTF8.library/Cmp
+UTF8.library/Copy
+UTF8.library/Decode
+UTF8.library/DecodeN
+UTF8.library/Encode
+UTF8.library/EstimateByteSize
+UTF8.library/FindGlyph
+UTF8.library/GetGlyph
+UTF8.library/GetGlyphAt
+UTF8.library/GetOffsetSize
+UTF8.library/GetSize
+UTF8.library/IndexOf
+UTF8.library/Insert
+UTF8.library/Left
+UTF8.library/Length
+UTF8.library/Merge
+UTF8.library/ModInsert
+UTF8.library/ModLeft
+UTF8.library/ModRemove
+UTF8.library/ModRight
+UTF8.library/ModSubString
+UTF8.library/ModToLower
+UTF8.library/ModToUpper
+UTF8.library/Printf
+UTF8.library/Remove
+UTF8.library/Right
+UTF8.library/SetGlyph
+UTF8.library/SubString
+UTF8.library/ToLower
+UTF8.library/ToUpper
+UTF8.library/Trim
+UTF8.library/TextUTF8
+UTF8.library/TextUTF8N
+UTF8.library/TextUTF8Extent
+UTF8.library/TextUTF8ExtentN
+UTF8.library/TextUTF8Length
+UTF8.library/TextUTF8LengthN
+
+
+UTF8.library/Copy                                                                     UTF8.library/Copy
+
+   NAME
+       Copy - Copy a UTF8 string
+
+   SYNOPSIS
+       Copy(UTF8)
+
+       	unsigned char *  Copy(unsigned char * UTF8);
+
+   FUNCTION
+       Copy a UTF8 string
+
+   INPUTS
+	UTF8: 
+		Some memory that hold the UTF8 text string.
+
+   OUTPUT
+		return a string allocated whit AllocVecTags(), you most free it whit FreeVec().
+
+   SEE ALSO
+       Copy()
+
+
+UTF8.library/CaseCmp                                                                 UTF8.library/CaseCmp
+
+   NAME
+       CaseCmp - compare strings
+
+   SYNOPSIS
+       CaseCmp( UTF8_Alphabet, UTF8_STR1, UTF8_STR2 )
+
+       	int CaseCmp(unsigned char *UTF8_Alphabet ,unsigned char * UTF8_STR1,unsigned char * UTF8_STR2);
+
+   FUNCTION
+	Compare a string, this function can be used for sorting.
+	upper case and lower case are treated as same.
+
+   INPUTS
+	UTF8_Alphabet:
+		 Alphabet used for as sort index for CMP.
+
+	UTF8_str1: 
+		Some memory that hold the 1ST UTF8 text string.
+
+	UTF8_str2: 
+		Some memory that hold the 2EN UTF8 text string.
+
+   OUTPUT
+		return -1,0,1 or 2
+
+		-1: UTF8_str1 is less then UTF8_str2
+		0: UTF8_str1 is same as UTF8_str2
+		1: UTF8_str is more then UTF9_str2
+		2: Not UTF8, CaseCmp() failed.
+
+   SEE ALSO
+       Cmp()
+
+
+UTF8.library/Cmp                                                                 UTF8.library/Cmp
+
+   NAME
+       Cmp - compare strings
+
+   SYNOPSIS
+       Cmp( UTF8_Alphabet, UTF8_STR1, UTF8_STR2 )
+
+       	int Cmp(unsigned char *UTF8_Alphabet ,unsigned char * UTF8_STR1,unsigned char * UTF8_STR2);
+
+   FUNCTION
+	Compare a string, this function can be used for sorting.
+	(Sort order is: aAbBcCdDeE and so on.)
+
+   INPUTS
+	UTF8_Alphabet:
+		 Alphabet used for as sort index for CMP.
+
+	UTF8_str1: 
+		Some memory that hold the 1ST UTF8 text string.
+
+	UTF8_str2: 
+		Some memory that hold the 2EN UTF8 text string.
+
+   OUTPUT
+		return -1,0,1 or 2
+
+		-1: UTF8_str1 is less then UTF8_str2
+		0: UTF8_str1 is same as UTF8_str2
+		1: UTF8_str is more then UTF9_str2
+		2: Not UTF8, Cmp() failed.
+
+   SEE ALSO
+       CaseCmp()
+
+
+
+
+UTF8.library/Decode                                                                 UTF8.library/Decode
+
+   NAME
+       Decode - Convert a UTF8 string into a ASCII string
+
+   SYNOPSIS
+       Decode( codeset_page, UTF8, mem_flags )
+
+       	unsigned char *  Decode( ULONG *codeset_page, unsigned char * UTF8,  ULONG mem_flags);
+
+   FUNCTION
+       Command used to decode a UTF8 string to a ASCII string using a codeset.
+
+   INPUTS
+	codeset_page: 
+		Codeset is the translation table from ASCII to Font Glyph's
+
+	UTF8: 
+		Some memory that hold the UTF8 text string.
+
+	flags:
+		the type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   OUTPUT
+		return a string allocated whit AllocVecTags(), you most free it whit FreeVec().
+
+   EXAMPLE
+
+		if (locale = ILocale->OpenLocale(NULL))
+		{
+			codeset_page = (ULONG *) IDiskfont -> ObtainCharsetInfo(
+				DFCS_NUMBER, (ULONG) locale -> loc_CodeSet , DFCS_MAPTABLE);
+			txt = IUTF8 -> Decode(codeset_page, UTF8, MEMF_PRIVATE);
+			ILocale->CloseLocale(locale);
+		}
+
+   SEE ALSO
+       Encode(), DiskFont.Library/ObtainCharsetInfo(), Locale.Library/CloseLocale()
+
+
+
+UTF8.library/Encode                                                                   UTF8.library/Encode
+ 
+   NAME
+       Encode -- Convert a ASCII string into a UTF8 string
+
+   SYNOPSIS
+       char *Encode (codeset_page, ASCII, ULONG mem_flag);
+
+       unsigned char * Encode( ULONG *codeset_page, char * ASCII, ULONG mem_flag);
+
+   FUNCTION
+	 when you need to convert a ASCII string into a UTF8 string, you use this command.
+
+   INPUTS
+
+	codeset_page: 
+		Codeset is the translation table from ASCII to Font Glyph's
+
+       ASCII
+		Some memory that hold the char * text string.
+
+	mem_flags:
+		the type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads,
+			if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   OUTPUT
+		return a string allocated whit AllocVecTags(), you most free it whit FreeVec().
+	
+
+   SEE ALSO
+       Decode, DiskFont.Library/ObtainCharsetInfo(), Locale.Library/CloseLocale()
+
+
+
+UTF8.library/EstimateByteSize                                                UTF8.library/EstimateByteSize
+
+   NAME
+        EstimateByteSize -- Estimate the length a Glyph in number of bytes it takes in UTF8 format.
+
+   SYNOPSIS
+        int EstimateByteSize(glyph);
+
+        int EstimateByteSize(ULONG glyph);
+
+   FUNCTION
+	Estimate the length a Glyph in number of bytes it takes in UTF8 format.
+	you can find the a Glyph in the Codeset table, if your converting from ASCII.
+	
+   INPUTS
+	glyph is a unicode number or the glyph representing the symbol.
+
+   SEE ALSO
+        Encode
+
+UTF8.library/FindGlyph                                                              UTF8.library/FindGlyph
+
+   NAME
+       FindGlyph -- Find the first Glyph in a string.
+
+   SYNOPSIS
+	ULONG FindGlyph ( UTF8, UTF8_find );
+
+	ULONG FindGlyph (unsigned char *UTF8, unsigned char *UTF8_find  );
+
+   FUNCTION
+	Find the first Glyph in a string.
+
+   INPUTS
+	UTF8 - is pointer memory hold a string in UTF8 encoding.
+	UTF8_find - The string to find.
+
+   RESULT
+	Returns the glyph position in a string.
+	If result is 0xFFFFFFFF then no Glyph was found.
+
+   SEE ALSO
+	GetGlyphAt, SubString, IndexOf
+
+
+
+
+UTF8.library/GetGlyph                                                              UTF8.library/GetGlyph
+
+   NAME
+       GetGlyph -- Get a glyph from UTF8 string
+
+   SYNOPSIS
+	ULONG GetGlyph ( data, len );
+
+	ULONG GetGlyph (unsigned char *UTF8, int * len );
+
+   FUNCTION
+	Get a glyph from UTF8 string
+
+   INPUTS
+       UTF8 is pointer memory hold a string in UTF8 encoding.
+
+   RESULT
+	Return value is Glyph or 32bit unicode value. 
+
+	also you get Length in bytes needed, by UTF8 from second parameter.
+
+   EXAMPLE
+		byte_offset = 0;
+		glyph = IUTF8 -> Decode(UTF8 + byte_offset , &len);
+		byte_offset += len;
+
+   SEE ALSO
+       SetGlyph, GetGlyphAt
+
+
+
+UTF8.library/GetGlyphAt                                                    UTF8.library/GetGlyphAt
+
+   NAME
+       GetGlyphAt -- Get a glyph from UTF8 string at position
+
+   SYNOPSIS
+	ULONG GetGlyphAt ( UTF8, pos, ilen);
+
+	ULONG GetGlyphAt ( unsigned char *UTF8, int pos, int * len);
+
+   FUNCTION
+	Works the same as GetGlyph, only tiny bit slower because it needs to count the Glyph's.
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding.
+	pos - position of glyph in UTF8 string.
+                
+   RESULT
+	a UTF8 Glyph.
+
+   SEE ALSO
+	GetGlyphAt
+
+
+
+UTF8.library/GetOffsetSize                                              UTF8.library/GetOffsetSize
+
+   NAME
+      	IndexOf  -- Size of first part of string in bytes
+
+   SYNOPSIS
+	ULONG GetOffsetSize ( UTF8, len );
+
+	ULONG GetOffsetSize ( unsigned char *UTF8, int len );
+
+   FUNCTION
+	Get the size of first part of UTF8 string.
+
+	If you like to find number of bytes in the middle of string.
+	you can do like this:
+
+	utf8_result = GetOffsetSize ( UTF8 + offset_in_bytes, len );
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding.
+
+	len - number of glyphs you want to find the size of
+                
+   RESULT
+	Size of a UTF8 string in bytes.
+	If error this function returns -1.
+
+   SEE ALSO
+	GetGlyphAt
+
+
+
+UTF8.library/GetSize                                                     UTF8.library/GetSize
+
+   NAME
+      	IndexOf  -- Size of string in bytes
+
+   SYNOPSIS
+	ULONG GetSize ( UTF8 );
+
+	ULONG GetSize ( unsigned char *UTF8 );
+
+   FUNCTION
+	Get the size of UTF8 string, this also includes the zero termination of the string 
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding.
+                
+   RESULT
+	Size of a UTF8 string in bytes.
+	If error this function returns -1.
+
+   SEE ALSO
+	GetGlyphAt
+
+
+
+UTF8.library/IndexOf                                                   UTF8.library/IndexOf
+
+   NAME
+       IndexOf - Find position of string.
+
+   SYNOPSIS
+	ULONG IndexOf ( UTF8_str , UTF8_find  );
+
+	ULONG IndexOf ( unsigned char *UTF8_str,unsigned char *UTF8_find );
+
+   FUNCTION
+	find the position of a word in a string.
+
+   INPUTS
+	UTF8_str - text string you want to find a word in UTF8 encoding.
+	UTF8_find - word to find in UTF8 encoding.
+                
+   RESULT
+        Position of the word to find, (as in glyph position, not byte offset).
+	If error this function returns -1.
+
+   SEE ALSO
+	UTF8.Library/SubString, UTF8.library/Insert, UTF8.Library/Remove
+
+
+
+UTF8.library/Insert                                                        UTF8.library/Insert
+
+   NAME
+       Insert - insert text into another text string.
+
+   SYNOPSIS
+	UTF8_Result = Insert ( UTF8_text1 , pos, UTF8_text2 );
+
+	unsigned long Insert ( unsigned char *UTF8_str,int pos, unsigned char *UTF8_text );
+
+   FUNCTION
+	insert a text string into another at glyph position.
+
+   INPUTS
+
+	UTF8_text1 -	text string you want to insert a text into.
+				(the text string is not modified, its copied.)
+
+	pos - 		The location you like the text string.
+
+	UTF8_text2 -	text string you want to insert.
+                
+   RESULT
+	
+	UTF8_Result -	New text string that contains, text1 whit text2 inserted into.
+
+   SEE ALSO
+	UTF8.Library/Remove
+
+
+
+UTF8.library/ModInsert                                                        UTF8.library/ModInsert
+
+   NAME
+       Insert - insert text into another text string.
+
+   SYNOPSIS
+	UTF8_Result = ModInsert ( UTF8_text1 , pos, UTF8_text2 );
+
+	unsigned long ModInsert ( unsigned char **UTF8_str,int pos, unsigned char *UTF8_text );
+
+   FUNCTION
+	Insert a text string into another at glyph position.
+
+   INPUTS
+
+	UTF8_text1 -	text string you want to insert a text into.
+				(the text string is not modified, its copied.)
+
+	pos - 		The location you like the text string.
+
+	UTF8_text2 -	text string you want to insert.
+                
+   RESULT
+	
+	Returns TRUE or FALSE
+
+   SEE ALSO
+	UTF8.Library/ModRemove, UTF8.Library/ModInsert
+
+
+
+UTF8.library/SetGlyph                                                     UTF8.library/SetGlyph
+ 
+   NAME
+       SetGlyph --  put a Glyph into memory whit UTF8 encoding.
+
+   SYNOPSIS
+	ULONG SetGlyph ( glyph, UTF8 );
+
+	glyphSize = SetGlyph ( ULONG glyph, unsigned char * data );
+
+   FUNCTION
+	 put a Glyph into memory whit UTF8 encoding.
+
+   INPUTS
+	glyph - a Glyph you like to add to a text string.
+	UTF8 - a UTF8 string to modify.
+
+   RESULT
+	returns glyphSize, glyph is written into data.
+
+
+   SEE ALSO
+       GetGlyph, GetGlyphAt
+
+
+
+UTF8.library/Length                                                           UTF8.library/Length
+
+   NAME
+	Length -- 	Get the number of Glyphs (not bytes)	
+
+   SYNOPSIS
+	int Length( UTF8 );
+
+	int Length ( unsigned char * UTF8 );
+
+   FUNCTION
+	Get the number of Glyphs (not bytes)
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding.
+
+   RESULT
+	number of Glyphs.
+
+
+
+UTF8.library/ModToLower                                                           UTF8.library/ModToLower
+
+   NAME
+	ToLower -- Convert a UTF8 string to lowercase.
+
+   SYNOPSIS
+	BOOL ModToLower( alphabet_UTF8, UTF8, mem_flags );
+
+	BOOL ModToLower ( unsigned char *alphabet_UTF8, unsigned char ** UTF8, ULONG mem_flags );
+
+   FUNCTION
+	Convert a UTF8 string to lowercase.
+	This function modifies the UTF8 string, unlike ToLower().
+	
+	Advantage is that you do not need to Free UTF8 input value, if you where going to replace it.
+
+   INPUTS
+	alphabet_UTF8  - Alphabet bet in UTF8 format, string most contain even number of glyphs.
+					Example: abcdefABCDEF
+
+	UTF8 - Text string in UTF8 encoding.
+
+	flags:
+		the type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	return TRUE or FALSE
+
+   SEE ALSO
+       UTF8.library/ToLower
+
+
+
+UTF8.library/ModToUpper                                                           UTF8.library/ModToUpper
+
+   NAME
+	ToUpper -- Convert a UTF8 string to lowercase.
+
+   SYNOPSIS
+	BOOL ModToUpper( alphabet_UTF8, UTF8, mem_flags );
+
+	BOOL ModToUpper ( unsigned char *alphabet_UTF8, unsigned char ** UTF8, ULONG mem_flags );
+
+   FUNCTION
+	Convert a UTF8 string to lowercase.
+	This function modifies the UTF8 string, unlike ToUpper().
+
+	Advantage is that you do not need to Free UTF8 input value, if you where going to replace it.
+
+   INPUTS
+	alphabet_UTF8  - Alphabet bet in UTF8 format, string most contain even number of glyphs.
+					Example: abcdefABCDEF
+
+	UTF8 - Text string in UTF8 encoding.
+
+	flags:
+		the type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	return true or false.
+
+   SEE ALSO
+       UTF8.library/ToUpper
+
+
+
+UTF8.library/Merge                                                           UTF8.library/Merge
+
+   NAME
+	Merge --  Join Text strings into one
+
+   SYNOPSIS
+	Merge( ULONG *codeset_page, ... );
+
+	void Printf ( ULONG *codeset_page, ... );
+
+   FUNCTION
+	join two ore more text string into one.
+
+   INPUTS
+	Codeset_page - a table that contains the 256 bytes long translation table whit glyph codes.
+
+	...  - Text strings to join, last argument most be 0.
+
+   RESULT
+	number of Glyphs.
+
+   EXAMPLE
+
+	UTF8_RESULT = Merge( CODESET_PAGE, "ONE", "TWO", "TREE" ,0 );
+
+
+
+UTF8.library/Printf                                                           UTF8.library/Printf
+
+   NAME
+	Printf --  print a UTF8 string to Shell.
+
+   SYNOPSIS
+	Printf( Codeset_page, UTF8_fmt, ... );
+
+	void Printf ( ULONG *codeset_page, unsigned char * UTF8_fmt );
+
+   FUNCTION
+	Print a UTF8 string, this function decodes UTF8 strings before they are printed.
+	The function uses IDOS->Printf internally, see IDOS->Printf for more info.
+
+	In addition to normal IDOS-Printf format tokens, this function support some normal newlib/printf format tokens.
+
+	%d	- decimal (%ld)
+	%i	- Integer (%ld)
+	%u	- unsigned integer (%lu)
+
+   INPUTS
+	Codeset_page - a table that contains the 256 bytes long translation table whit glyph codes.
+
+	UTF8 - Text string in UTF8 encoding.
+
+	...  - arguments like strings, integers and so on.
+	
+
+   RESULT
+	number of Glyphs.
+
+
+
+UTF8.library/ToLower                                                           UTF8.library/ToLower
+
+   NAME
+	ToLower -- Convert a UTF8 string to lowercase.
+
+   SYNOPSIS
+	UTF8_Result =  ToLower( alphabet_UTF8, UTF8, ULONG mem_flags );
+
+	unsigned char * ToLower ( unsigned char * UTF8, unsigned char *alphabet_UTF8 );
+
+   FUNCTION
+	Convert a UTF8 string to lowercase.
+	this function does NOT Modify UTF8 input, unlike ModToLower()
+
+	You should only use this function when you need a copy.
+
+   INPUTS
+	alphabet_UTF8  - Alphabet bet in UTF8 format, string most contain even number of glyphs.
+					Example: abcdefABCDEF
+
+	UTF8 - Text string in UTF8 encoding.
+
+	mem_flags:
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	return a lowercase UTF8 string 
+
+
+
+UTF8.library/ToUpper                                                           UTF8.library/ToUpper
+
+   NAME
+	ToUpper -- Convert a UTF8 string to lowercase.
+
+   SYNOPSIS
+	UTF8_Result = ToUpper( alphabet_UTF8, UTF8, ULONG mem_flags );
+
+	unsigned char * ToUpper ( unsigned char *alphabet_UTF8, unsigned char * UTF8 );
+
+   FUNCTION
+	Convert a UTF8 string to lowercase.
+	this function does NOT Modify UTF8 input, unlike ModToUpper()
+
+	You should only use this function when you need a copy.
+
+   INPUTS
+	alphabet_UTF8  - Alphabet bet in UTF8 format, string most contain even number of glyphs.
+					Example: abcdefABCDEF
+
+	UTF8 - Text string in UTF8 encoding.
+
+	mem_flags:
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	return a uppercase UTF8 string 
+
+
+
+UTF8.library/SubString                                                           UTF8.library/SubString
+
+   NAME
+	SubString -- Copy part of UTF8 string
+
+   SYNOPSIS
+	unsigned char * SubString( UTF8, start, len, ULONG mem_flag  );
+
+	unsigned char * SubString ( unsigned char * UTF8, int start, int len , ULONG mem_flag  );
+
+   FUNCTION
+	Copy part of UTF8 string
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding.
+
+	Start - First Glyph you like to copy.
+
+	Len - Number of Glyphs to copy.
+
+	flags:
+		the type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	returns a new UTF8 string, use FreeVec() to free the memory.
+
+
+
+UTF8.library/ModSubString                                                           UTF8.library/ModSubString
+
+   NAME
+	ModSubString -- Cut part of string, replace original string.
+
+   SYNOPSIS
+	unsigned char * SubString( UTF8, start, len, ULONG mem_flag  );
+
+	unsigned char * SubString ( unsigned char * UTF8, int start, int len , ULONG mem_flag  );
+
+   FUNCTION
+	Cut part of string, replace original string.
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding.
+
+	Start - First Glyph you like to copy.
+
+	Len - Number of Glyphs to copy.
+
+	flags:
+		the type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	returns TRUE or FALSE.
+
+
+
+UTF8.library/Left                                                           UTF8.library/Left
+
+   NAME
+	Left -- Copy first part of a UTF8 string
+
+   SYNOPSIS
+	unsigned char * Left( UTF8, len );
+
+	unsigned char * Left ( unsigned char * UTF8, int len, ULONG mem_flags );
+
+   FUNCTION
+	Copy first part of UTF8 string
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding.
+
+	Len - Number of Glyphs to copy.
+
+	mem_flags:
+		the type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	returns a new UTF8 string, use FreeVec() to free the memory.
+
+   SEE ALSO
+       UTF8.library/ModLeft
+
+
+
+UTF8.library/ModLeft                                                           UTF8.library/ModLeft
+
+   NAME
+	Left -- Cuts out fist part of string, replaces string.
+
+   SYNOPSIS
+	BOOL ModLeft( UTF8, len, mem_flags );
+
+	BOOL ModLeft( unsigned char **UTF8, int len, ULONG mem_flags );
+
+   FUNCTION
+	Cuts out fist part of string, replaces string.
+	Use this function if you like don't need a copy.
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding, the string till be modified.
+
+	Len - Number of Glyphs to cut.
+
+	mem_flags:
+		the type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	returns TRUE or FALSE.
+
+   SEE ALSO
+       UTF8.library/Left
+
+
+
+UTF8.library/ModRight                                                       UTF8.library/ModRight
+
+   NAME
+	Left -- Cuts out last part of string, replaces string.
+
+   SYNOPSIS
+	BOOL ModRight( UTF8, len, mem_flags );
+
+	BOOL ModRight( unsigned char **UTF8, int len, ULONG mem_flags );
+
+   FUNCTION
+	Cuts out last part of string, replaces string.
+	Use this function if you like don't need a copy.
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding, the string till be modified.
+
+	Len - Number of Glyphs to cut
+
+	mem_flags:
+		the type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	returns TRUE or FALSE.
+
+   SEE ALSO
+       UTF8.library/Right
+
+
+
+UTF8.library/Right                                                               UTF8.library/Right
+
+   NAME
+	Left -- Copy last part of a UTF8 string
+
+   SYNOPSIS
+	unsigned char * Right( UTF8, len, mem_flags );
+
+	unsigned char * Right ( unsigned char * UTF8, int len, ULONG mem_flags );
+
+   FUNCTION
+	Copy last part of a UTF8 string
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding.
+
+	Len - Number of Glyphs to copy.
+
+	flags:
+		the type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	returns a new UTF8 string, use FreeVec() to free the memory.
+
+
+
+UTF8.library/Trim                                                               UTF8.library/Trim
+
+   NAME
+	Trim -- Remove SPACE (0x20) from start and end of text string
+
+   SYNOPSIS
+	unsigned char * Trim( UTF8, mem_flags );
+
+	unsigned char * Trim ( unsigned char * UTF8 , ULONG mem_flags );
+
+   FUNCTION
+	Remove SPACE (0x20) from start and end of text string
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding.
+
+	mem_flags:
+		the type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	returns a new UTF8 string, use FreeVec() to free the memory.
+
+UTF8.library/ModTrim                                                           UTF8.library/ModTrim
+
+   NAME
+	ModTrim -- Remove SPACE (0x20) from start and end of text string
+
+   SYNOPSIS
+	unsigned char * ModTrim( UTF8, mem_flags );
+
+	unsigned char * ModTrim ( unsigned char ** UTF8 , ULONG mem_flags );
+
+   FUNCTION
+	Remove SPACE (0x20) from start and end of text string, original string will be replaced.
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding.
+
+	mem_flags:
+		The type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	Returns TRUE or FALSE.
+
+
+
+UTF8.library/Remove                                                                   UTF8.library/Remove
+
+   NAME
+	Remove -- Remove part of a UTF8 text string
+
+   SYNOPSIS
+	unsigned char * Remove( UTF8, start, len, mem_flag );
+
+	unsigned char * Remove( unsigned char * UTF8, int start, int len, ULONG mem_flag );
+
+   FUNCTION
+	Remove part of a UTF8 text string
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding.
+
+	Start - First Glyph you like to remove.
+
+	Len - Number of Glyphs to remove.
+
+	mem_flags:
+		The type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	Returns a new UTF8 string, use FreeVec() to free the memory.
+
+
+UTF8.library/ModRemove                                                           UTF8.library/ModRemove
+
+   NAME
+
+	ModRemove -- Remove part of a UTF8 text string
+
+   SYNOPSIS
+	BOOL ModRemove( UTF8, start, len, mem_flag );
+
+	BOOL ModRemove( unsigned char * UTF8, int start, int len, ULONG mem_flag );
+
+   FUNCTION
+	Remove part of a UTF8 text string, original string will be replaced.
+
+   INPUTS
+	UTF8 - Text string in UTF8 encoding, (string is replaced.)
+
+	Start - First Glyph you like to remove.
+
+	Len - Number of Glyphs to remove.
+
+	mem_flags:
+		The type of memory you like new memory to be created in.
+
+		MEMF_PRIVATE
+			This is what you should be using, if your program is not multi-threaded, 
+			if string does not need to be shared between threads, if the string is not sheared whit other programs.
+
+		MEMF_SHARED 
+			Don't use this unless, your program has a string you need to share whit a other thread, 
+			or the memory is sheared whit other program.
+
+   RESULT
+	Returns TRUE or FALSE.
+
+UTF8.library/TextUTF8
+UTF8.library/TextUTF8N
+
+   NAME
+
+   SYNOPSIS
+
+	TextUTF8 ( rast_port, outline_font, font_size,  xpos, ypos, UTF8_text );
+	TextUTF8N ( rast_port, outline_font, font_size,  xpos, ypos, UTF8_text, len );
+
+	TextUTF8 ( struct RastPort *rast_port,struct OutlineFont *outline_font, float font_size, int xpos, int ypos, unsigned char *UTF8_text );
+	TextUTF8N ( struct RastPort *rast_port,struct OutlineFont *outline_font, float font_size, int xpos, int ypos, unsigned char *UTF8_text, int len );
+
+   FUNCTION
+
+	This function is just like graphics.library/Text, 
+	prints text into a RastPort / bitmap, no formating, prints every thing on one line.
+
+   INPUTS
+
+	rast_port
+		Window rastport.
+	
+	outline_font
+		a outline you have opned using diskfont.
+	
+	font_size
+		The pixel hight of the font.
+	
+	xpos & ypos
+		The x and y coordinate to put the text
+
+	UTF8_text
+		A text string in UTF8 format, you can convert a ASCII string into UTF8 using encode() function.
+
+	len
+		max number of chars to print.
+
+
+UTF8.library/TextUTF8Extent
+UTF8.library/TextUTF8ExtentN
+
+   NAME
+
+   SYNOPSIS
+
+	TextUTF8Extent ( outline_font, font_size, UTF8_text, TextExtent );
+	TextUTF8ExtentN ( outline_font, font_size, UTF8_text, len, TextExtent );
+
+	void TextUTF8Extent ( struct OutlineFont *outline_font, float font_size, unsigned char *UTF8, struct TextExtent *ext );
+	void TextUTF8ExtentN ( struct OutlineFont *outline_font, float font_size, unsigned char *UTF8, int len, struct TextExtent *ext );
+
+   FUNCTION
+
+	This function is just like graphics.library/TextExtent, 
+	prints text into a RastPort / bitmap, no formating, prints every thing on one line.
+
+   INPUTS
+
+	rast_port
+		Window rastport.
+	
+	outline_font
+		a outline you have opned using diskfont.
+	
+	font_size
+		The pixel hight of the font.
+	
+	UTF8_text
+		A text string in UTF8 format, you can convert a ASCII string into UTF8 using encode() function.
+
+	len
+		max number of chars to print.
+
+	textExtent - a structure to hold the result.
+
+  RESULTS
+
+	textExtent is filled in as follows:
+
+	    te_Width  - same as TextLength() result: the rp_cp_x
+	                advance that rendering this text would cause.
+
+	    te_Height - same as tf_YSize.  The height of the
+	                font.
+
+	    te_Extent.MinX - the offset to the left side of the
+	                rectangle this would render into.  Often zero.
+
+	    te_Extent.MinY - same as -tf_Baseline.  The offset
+	                from the baseline to the top of the rectangle
+	                this would render into.
+
+	    te_Extent.MaxX - the offset of the left side of the
+	                rectangle this would render into.  Often the
+	                same as te_Width-1.
+
+	    te_Extent.MaxY - same as tf_YSize-tf_Baseline-1.
+	                The offset from the baseline to the bottom of
+	                the rectangle this would render into.
+
+UTF8.library/TextUTF8Length
+UTF8.library/TextUTF8LengthN
+
+  NAME
+	TextLength -- Determine raster length of text data.
+
+   SYNOPSIS
+	length = TextUTF8Length( OutlineFont, font_size, UTF8_text)
+	length = TextUTF8LengthN( OutlineFont, font_size, UTF8_text, count)
+
+	int TextUTF8Length ( struct OutlineFont *ofont, float font_size, unsigned char *UTF8_text );
+	int TextUTF8LengthN ( struct OutlineFont *ofont, float font_size, unsigned char *UTF8_text, int len );
+
+   FUNCTION
+	Get pixel size of UTF8 text string, just like graphics.library/TextLength
+
+   INPUTS
+
+	outline_font
+		a outline you have opned using diskfont.
+	
+	font_size
+		The pixel hight of the font.
+
+	UTF8_text 
+		The address of string to determine the length of
+
+	count  
+		 Max glyphs in text string to print.
+
+   RESULTS
+	length - the number of pixels in x this UTF8 text would occupy.

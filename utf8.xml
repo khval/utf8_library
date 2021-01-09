@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE library SYSTEM "library.dtd">
+<library name="UTF8" basename="UTF8Base" openname="UTF8.library">
+	<include>exec/types.h</include>
+	<include>libraries/UTF8.h</include>
+	<interface name="main" version="1.0" struct="UTF8IFace" prefix="_UTF8_" asmprefix="IUTF8" global="IUTF8">
+		<method name="Obtain" result="ULONG"/>
+		<method name="Release" result="ULONG"/>
+		<method name="Expunge" result="void" status="unimplemented"/>
+		<method name="Clone" result="struct Interface *" status="unimplemented"/>
+		<method name="Decode" result="unsigned char *">
+			<arg name="UTF8" type="unsigned char *"/>
+			<arg name="codeset_page" type="ULONG"/>
+		</method>
+		<method name="Encode" result="unsigned char *">
+			<arg name="ascii" type="char *"/>
+			<arg name="codeset_page" type="ULONG"/>
+		</method>
+		<method name="EstimateByteSize" result="int">
+			<arg name="glyph" type="ULONG"/>
+		</method>
+		<method name="GetGlyph" result="ULONG">
+			<arg name="data" type="unsigned char"/>
+			<arg name="len" type="int *"/>
+		</method>
+		<method name="SetGlyph" result="int">
+			<arg name="glyph" type="ULONG"/>
+			<arg name="data" type="unsigned char *"/>
+		</method>
+		<method name="Length" result="int">
+			<arg name="UTF8" type="unsigned char *"/>
+		</method>
+	</interface>
+</library>
