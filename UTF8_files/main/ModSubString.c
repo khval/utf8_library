@@ -59,23 +59,23 @@
 
 BOOL _UTF8_ModSubString(struct UTF8IFace *Self,unsigned char **UTF8, int _start, int _len, ULONG mem_flags )
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	int pos, size;
 	BOOL ret=FALSE;
 	unsigned char *temp;
 
-	pos = Self->GetOffsetSize( *UTF8, _start);
+	pos = _UTF8_GetOffsetSize( *UTF8, _start);
 	if (pos == -1) return FALSE;
 
-	size = Self->GetOffsetSize( *UTF8+pos,_len) ;
+	size = _UTF8_GetOffsetSize( *UTF8+pos,_len) ;
 	if (size == -1) return FALSE;
 
-	temp = (unsigned char *) libBase -> IExec -> AllocVecTags( size+1 , AVT_Type, mem_flags, TAG_END );
+	temp = (unsigned char *) AllocVecTags( size+1 , AVT_Type, mem_flags, TAG_END );
 	if (temp)
 	{
 		libBase->IExec->CopyMem(*UTF8+pos,temp,size);
 		temp[size] = 0;
-		libBase -> IExec -> FreeVec( *UTF8 );
+		FreeVec( *UTF8 );
 		*UTF8 =temp;
 		ret = TRUE;
 	}

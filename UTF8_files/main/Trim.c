@@ -59,7 +59,7 @@
 
 unsigned char *_UTF8_Trim(struct UTF8IFace *Self, unsigned char *UTF8, ULONG mem_flags )
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	int _start =0;
 	int _end = -1;
 	int _len;
@@ -77,7 +77,7 @@ unsigned char *_UTF8_Trim(struct UTF8IFace *Self, unsigned char *UTF8, ULONG mem
 	}
 	_len =_end-_start+1;
 
-	temp = (unsigned char *) libBase -> IExec -> AllocVec( _len + 1, MEMF_CLEAR | mem_flags );
+	temp = (unsigned char *) AllocVec( _len + 1, MEMF_CLEAR | mem_flags );
 	if (temp)
 	{
 		libBase->IExec -> CopyMem( UTF8+_start, temp, _len );

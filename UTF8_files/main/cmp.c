@@ -59,26 +59,26 @@
 
 int _UTF8_Cmp(struct UTF8IFace *Self, unsigned char *UTF8_alphabet, unsigned char *UTF8_one,  unsigned char *UTF8_two)
 {
-//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+//	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	int pos_one =0, pos_two = 0, len;
 	ULONG value_one,value_two,t,alen,halen;
 
-	alen = Self-> Length( UTF8_alphabet );
+	alen = _UTF8_ Length( UTF8_alphabet );
 	halen = alen /2;
 
 	do
 	{
-		value_one = Self -> GetGlyph( UTF8_one + pos_one , &len );
+		value_one = _UTF8_GetGlyph( UTF8_one + pos_one , &len );
 		if (len==0) return 2;
 		pos_one += len;
-		value_two = Self -> GetGlyph( UTF8_two + pos_two , &len );
+		value_two = _UTF8_GetGlyph( UTF8_two + pos_two , &len );
 		if (len==0) return 2;
 		pos_two +=len;
 
-		t=Self -> FindGlyph( UTF8_alphabet, value_one );
+		t=_UTF8_FindGlyph( UTF8_alphabet, value_one );
 		if (t!=0xFFFFFFFF) 	value_one = ((t%halen)<<1) + (t/halen)+1;
 
-		t=Self -> FindGlyph( UTF8_alphabet, value_two );
+		t=_UTF8_FindGlyph( UTF8_alphabet, value_two );
 		if (t!=0xFFFFFFFF)	value_two = ((t%halen)<<1) + (t/halen)+1;
 
 		if (value_one>value_two) return 1;

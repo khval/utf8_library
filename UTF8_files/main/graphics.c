@@ -31,7 +31,7 @@
 
 BOOL glyph_size(struct UTF8IFace *Self, struct OutlineFont *ofont,float font_size, uint32 long_char_1, int *glyph_width, int *glyph_height, int *glyph_min )
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	struct GlyphMap *glyph;
 	int error = 0;
 	ULONG XDPI, YDPI; 
@@ -78,7 +78,7 @@ BOOL glyph_size(struct UTF8IFace *Self, struct OutlineFont *ofont,float font_siz
 
 int glyph_draw(struct UTF8IFace *Self,struct RastPort *rp, struct OutlineFont *ofont, float font_size, uint32 long_char_1 , uint32 x, uint32 y)
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	struct GlyphMap *glyph;
 	int error = 0;
 	ULONG XDPI, YDPI;
@@ -138,7 +138,7 @@ void _UTF8_TextUTF8Extent( struct UTF8IFace *Self,struct OutlineFont *ofont, flo
 	ext -> te_Width = 0;
 	ext -> te_Height = 0;
 
-	for ( pos = 0; (glyph = Self -> GetGlyph( UTF8 + pos , &len )); )
+	for ( pos = 0; (glyph = _UTF8_GetGlyph( UTF8 + pos , &len )); )
 	{
 		glyph_size( Self, ofont, font_size, glyph, &width, &height, &y0 );
 
@@ -155,7 +155,7 @@ void _UTF8_TextUTF8Extent( struct UTF8IFace *Self,struct OutlineFont *ofont, flo
 
 void _UTF8_TextUTF8ExtentN( struct UTF8IFace *Self,struct OutlineFont *ofont, float font_size, unsigned char *UTF8, int n, struct TextExtent *ext )
 {
-//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+//	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	ULONG glyph, pos;
 	int len;
 	int width, height, y0;
@@ -166,7 +166,7 @@ void _UTF8_TextUTF8ExtentN( struct UTF8IFace *Self,struct OutlineFont *ofont, fl
 	pos = 0;
 	for ( ; n>0 ; n-- )
 	{
-		glyph = Self -> GetGlyph( UTF8 + pos , &len );
+		glyph = _UTF8_GetGlyph( UTF8 + pos , &len );
 		glyph_size( Self, ofont, font_size, glyph, &width, &height, &y0 );
 
 		if (height > ext -> te_Height )
@@ -187,7 +187,7 @@ int _UTF8_TextUTF8Length( struct UTF8IFace *Self,struct OutlineFont *ofont, floa
 	ULONG xpos = 0;
 	int width, height, y0;
 
-	for ( pos = 0; (glyph = Self -> GetGlyph( UTF8 + pos , &len )); )
+	for ( pos = 0; (glyph = _UTF8_GetGlyph( UTF8 + pos , &len )); )
 	{
 		glyph_size( Self, ofont, font_size, glyph, &width,&height,&y0 );
 		xpos +=width + 2;  
@@ -204,7 +204,7 @@ int _UTF8_TextUTF8LengthN( struct UTF8IFace *Self,struct OutlineFont *ofont, flo
 	ULONG xpos = 0;
 	int width, height, y0;
 
-	for ( pos = 0; ((glyph = Self -> GetGlyph( UTF8 + pos , &len ))&&(n-->0)); )
+	for ( pos = 0; ((glyph = _UTF8_GetGlyph( UTF8 + pos , &len ))&&(n-->0)); )
 	{
 		glyph_size( Self, ofont, font_size, glyph, &width,&height,&y0 );
 		xpos +=width + 2;  
@@ -218,10 +218,10 @@ void _UTF8_TextUTF8( struct UTF8IFace *Self,struct RastPort *rp,struct OutlineFo
 {
 	ULONG glyph, pos;
 	int len;
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	ULONG w = libBase -> IGraphics ->GetBitMapAttr( rp -> BitMap, BMA_ACTUALWIDTH );
 
-	for ( pos = 0; (glyph = Self -> GetGlyph( UTF8 + pos , &len )); )
+	for ( pos = 0; (glyph = _UTF8_GetGlyph( UTF8 + pos , &len )); )
 	{
 		xpos += glyph_draw( Self, rp, ofont, font_size, glyph, xpos, ypos ) + 2;
 		pos += len;
@@ -233,10 +233,10 @@ void _UTF8_TextUTF8N( struct UTF8IFace *Self,struct RastPort *rp,struct OutlineF
 {
 	ULONG glyph, pos;
 	int len;
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	ULONG w = libBase -> IGraphics ->GetBitMapAttr( rp -> BitMap, BMA_ACTUALWIDTH );
 
-	for ( pos = 0; ((glyph = Self -> GetGlyph( UTF8 + pos , &len )) && (n-->0)); )
+	for ( pos = 0; ((glyph = _UTF8_GetGlyph( UTF8 + pos , &len )) && (n-->0)); )
 	{
 		xpos += glyph_draw( Self, rp, ofont, font_size, glyph, xpos, ypos ) + 2;
 		pos += len;
@@ -247,7 +247,7 @@ void _UTF8_TextUTF8N( struct UTF8IFace *Self,struct RastPort *rp,struct OutlineF
 void _UTF32_TextUTF32( struct UTF8IFace *Self,struct RastPort *rp,struct OutlineFont *ofont, float font_size, int xpos, int ypos, ULONG *UTF32 )
 {
 	ULONG glyph, pos;
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	ULONG w = libBase -> IGraphics ->GetBitMapAttr( rp -> BitMap, BMA_ACTUALWIDTH );
 
 	for ( ; glyph = *UTF32; UTF32++ )

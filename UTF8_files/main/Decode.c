@@ -59,7 +59,7 @@
 
 char * _UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char * UTF8, ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	char *c;
 	char *new_str = NULL;
 	int pos,n=0,len;
@@ -68,11 +68,11 @@ char * _UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char *
 
 	if (!UTF8) return NULL;
 
-	size =  Self -> Length( UTF8 ) + 1;
+	size =  _UTF8_Length( UTF8 ) + 1;
 
-	libBase -> IExec -> DebugPrintF(" _UTF8_Decode UTF8 string len = %d \n", size);  
+	DebugPrintF(" _UTF8_Decode UTF8 string len = %d \n", size);  
 
-	new_str =  libBase -> IExec -> AllocVecTags(size+100, 
+	new_str =  AllocVecTags(size+100, 
 					AVT_Type, flags,
 					AVT_ClearWithValue, TRUE, 
 					TAG_END );
@@ -85,7 +85,7 @@ char * _UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char *
 		{
 			do
 			{
-				ret = Self -> GetGlyph( UTF8 + pos, &len ) ;
+				ret = _UTF8_GetGlyph( UTF8 + pos, &len ) ;
 				pos += len;
 				*c = ret < 256 ? (char) ret : '#';
 				c++;
@@ -95,7 +95,7 @@ char * _UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char *
 		{
 			do
 			{
-				ret = Self -> GetGlyph( UTF8 + pos, &len ) ;
+				ret = _UTF8_GetGlyph( UTF8 + pos, &len ) ;
 				pos += len;
 
 				*c = '#';	// default value if glyph is not found.
@@ -114,7 +114,7 @@ char * _UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char *
 
 char * _UTF8_DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char * UTF8, ULONG bytes, ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	char *c;
 	char *new_str = NULL;
 	int pos,n=0,len;
@@ -123,11 +123,11 @@ char * _UTF8_DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned cha
 
 	if (!UTF8) return NULL;
 
-	size =  Self -> Length( UTF8 ) + 1;
+	size =  _UTF8_Length( UTF8 ) + 1;
 
-	libBase -> IExec -> DebugPrintF(" _UTF8_Decode UTF8 string len = %d \n", size);  
+	DebugPrintF(" _UTF8_Decode UTF8 string len = %d \n", size);  
 
-	new_str =  libBase -> IExec -> AllocVecTags(size+100, 
+	new_str =  AllocVecTags(size+100, 
 					AVT_Type, flags,
 					TAG_END );
 	if (new_str)
@@ -139,7 +139,7 @@ char * _UTF8_DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned cha
 		{
 			do
 			{
-				ret = Self -> GetGlyph( UTF8 + pos, &len ) ;
+				ret = _UTF8_GetGlyph( UTF8 + pos, &len ) ;
 				pos += len;
 				bytes -= len;
 				*c = ret < 256 ? (char) ret : '#';
@@ -150,7 +150,7 @@ char * _UTF8_DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned cha
 		{
 			do
 			{
-				ret = Self -> GetGlyph( UTF8 + pos, &len ) ;
+				ret = _UTF8_GetGlyph( UTF8 + pos, &len ) ;
 				pos += len;
 				bytes -= len;
 

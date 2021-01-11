@@ -132,7 +132,7 @@ void VARARGS68K _UTF8_Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigne
 {
 	va_list list;
 	va_startlinear(list, utf8_fmt);
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	const char *fmt_list[]={"%s","%u","%d","%i","%lld","%f","%h", NULL};
 	char *fmt;
 	char fmt_buffer[6];
@@ -145,10 +145,10 @@ void VARARGS68K _UTF8_Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigne
 	if (!libBase -> IDOS) return;
 
 
-	fmt = Self->Decode( codeset_page, utf8_fmt, MEMF_PRIVATE );
+	fmt = _UTF8_Decode( codeset_page, utf8_fmt, MEMF_PRIVATE );
 	if (fmt)
 	{
-		buffer = (char *) libBase -> IExec -> AllocVec( Self->GetSize ( utf8_fmt) ,MEMF_PRIVATE | MEMF_CLEAR );
+		buffer = (char *) AllocVec( _UTF8_GetSize ( utf8_fmt) ,MEMF_PRIVATE | MEMF_CLEAR );
 	}
 
 	if ((fmt)&&(buffer))
@@ -174,14 +174,14 @@ void VARARGS68K _UTF8_Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigne
 
 							tmp =  va_arg(list,unsigned char *);
 
-							arg_str = Self->Decode( codeset_page, tmp , MEMF_PRIVATE );
+							arg_str = _UTF8_Decode( codeset_page, tmp , MEMF_PRIVATE );
 							if (arg_str)
 							{
 								libBase -> IDOS -> Printf("%s",arg_str);
-								libBase -> IExec -> FreeVec(arg_str);
+								FreeVec(arg_str);
 							}
 
-					 		libBase -> IExec -> DebugPrintF("We are done decoding the string \n");
+					 		DebugPrintF("We are done decoding the string \n");
 							break;
 						case sw_uint32:
 							libBase -> IDOS -> Printf("%lu", va_arg(list,ULONG)); break;
@@ -210,8 +210,8 @@ void VARARGS68K _UTF8_Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigne
 
 	libBase -> IDOS -> Printf("%s",buffer);
 
-	if (buffer) libBase -> IExec -> FreeVec(buffer);
-	if (fmt) libBase -> IExec -> FreeVec(fmt);
+	if (buffer) FreeVec(buffer);
+	if (fmt) FreeVec(fmt);
 
 	va_end(list);
 }

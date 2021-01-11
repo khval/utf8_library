@@ -88,15 +88,15 @@ STATIC APTR libClose(struct LibraryManagerInterface *Self)
 void close_libs( struct _Library *libBase )
 {
 	// Close DOS library
-	if (libBase->IDOS) libBase -> IExec -> DropInterface( (struct Interface *) libBase-> IDOS);
+	if (libBase->IDOS) DropInterface( (struct Interface *) libBase-> IDOS);
 	if (libBase -> DOS_base) libBase -> IExec-> CloseLibrary( libBase -> DOS_base);
 
 	// Close Diskfont library
-	if (libBase -> IDiskfont) libBase -> IExec -> DropInterface( (struct Interface *) libBase-> IDiskfont);
+	if (libBase -> IDiskfont) DropInterface( (struct Interface *) libBase-> IDiskfont);
 	if (libBase -> Diskfont_base) libBase -> IExec-> CloseLibrary( libBase -> Diskfont_base);
 
 	// Close Graphics library
-	if (libBase->IGraphics) libBase -> IExec -> DropInterface( (struct Interface *) libBase-> IGraphics);
+	if (libBase->IGraphics) DropInterface( (struct Interface *) libBase-> IGraphics);
 	if (libBase -> Graphics_base) libBase -> IExec-> CloseLibrary( libBase -> Graphics_base);
 }
 
@@ -159,28 +159,28 @@ STATIC struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct
 
 	if (libBase->DOS_base)
 	{
-		libBase -> IExec -> DebugPrintF("UTF8.library: opened DOS.library version 53\n");
+		DebugPrintF("UTF8.library: opened DOS.library version 53\n");
 		libBase->IDOS = (struct DOSIFace *) IExec->GetInterface(libBase-> DOS_base,"main", 1, NULL);
 	} 
 
 	if (libBase->Diskfont_base)
 	{
-		libBase -> IExec -> DebugPrintF("UTF8.library: opened Diskfont.library version 53\n");
+		DebugPrintF("UTF8.library: opened Diskfont.library version 53\n");
 		libBase->IDiskfont = (struct DiskfontIFace *) IExec->GetInterface(libBase-> Diskfont_base,"main", 1, NULL);
 	} 
 
 	if (libBase->Graphics_base)
 	{
-		libBase -> IExec -> DebugPrintF("UTF8.library: opened Graphics.library version 53\n");
+		DebugPrintF("UTF8.library: opened Graphics.library version 53\n");
 		libBase->IGraphics = (struct GraphicsIFace *) IExec->GetInterface(libBase-> Graphics_base,"main", 1, NULL);
 	} 
 
 
 	if (!( (libBase->DOS_base) && (libBase->Diskfont_base) && (libBase->Graphics_base) ) )
 	{
-		if (!libBase->IDOS) libBase -> IExec -> DebugPrintF("UTF8.library: can't open DOS.library version 53\n");
-		if (!libBase->IDiskfont) libBase -> IExec -> DebugPrintF("UTF8.library: can't open Diskfont.library version 54\n");
-		if (!libBase->IGraphics) libBase -> IExec -> DebugPrintF("UTF8.library: can't open Graphics.library version 53\n");
+		if (!libBase->IDOS) DebugPrintF("UTF8.library: can't open DOS.library version 53\n");
+		if (!libBase->IDiskfont) DebugPrintF("UTF8.library: can't open Diskfont.library version 54\n");
+		if (!libBase->IGraphics) DebugPrintF("UTF8.library: can't open Graphics.library version 53\n");
 
 		close_libs( libBase );
 		return NULL;

@@ -61,19 +61,19 @@
 unsigned char * _UTF8_Remove(struct UTF8IFace *Self,
 		unsigned char *UTF8, int _start, int _len, ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	int size_before, size_to_remove, size;
 	unsigned char *temp;
 
-	size = Self->GetSize(UTF8);
+	size = _UTF8_GetSize(UTF8);
 
-	size_before = Self->GetOffsetSize(UTF8, _start);
+	size_before = _UTF8_GetOffsetSize(UTF8, _start);
 	if (size_before==-1) return NULL;
 
-	size_to_remove = Self->GetOffsetSize(UTF8 + size_before, _len);
+	size_to_remove = _UTF8_GetOffsetSize(UTF8 + size_before, _len);
 	if (size_to_remove==-1) return NULL;
 
-	temp = (unsigned char *) libBase -> IExec -> AllocVec(size - size_to_remove, MEMF_CLEAR | flags);
+	temp = (unsigned char *) AllocVec(size - size_to_remove, MEMF_CLEAR | flags);
 	if (temp)
 	{
 		libBase->IExec->CopyMem(UTF8,temp,size_before);

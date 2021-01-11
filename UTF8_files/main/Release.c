@@ -55,6 +55,6 @@
 
 ULONG _UTF8_Release(struct UTF8IFace *Self)
 {
-    return Self -> Data.RefCount--;
+    return _UTF8_Data.RefCount--;
 }
 

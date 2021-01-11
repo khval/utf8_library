@@ -58,19 +58,19 @@
 
 BOOL _UTF8_ModInsert(struct UTF8IFace *Self, unsigned char **UTF8, int _start, unsigned char *UTF8_insert , ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	BOOL ret = FALSE;
 	int size, size_before, size_insert;
 	unsigned char *temp;
 
 
-	size = Self->GetSize(*UTF8);
-	size_insert = Self -> GetSize(UTF8_insert) - 1; // we don't want the extra 0 in the size.
+	size = _UTF8_GetSize(*UTF8);
+	size_insert = _UTF8_GetSize(UTF8_insert) - 1; // we don't want the extra 0 in the size.
 
-	size_before = Self->GetOffsetSize(*UTF8, _start);
+	size_before = _UTF8_GetOffsetSize(*UTF8, _start);
 	if (size_before==-1) return FALSE;
 
-	temp = (unsigned char *) libBase -> IExec -> AllocVecTags(size + size_insert, AVT_Type, flags, TAG_END );
+	temp = (unsigned char *) AllocVecTags(size + size_insert, AVT_Type, flags, TAG_END );
 	if (temp)
 	{
 		libBase->IExec->CopyMem( UTF8, temp, size_before );

@@ -60,12 +60,12 @@
 BOOL _UTF8_ModRight(struct UTF8IFace *Self,
 		unsigned char **UTF8, int _len, ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	int pos =0;
 	int size;
 	BOOL ret = FALSE;
 	unsigned char *temp;
-	int _max_len = Self -> Length( *UTF8 ) ;
+	int _max_len = _UTF8_Length( *UTF8 ) ;
 	int _start = _max_len  - _len; 
 
 	if (_start<0)
@@ -74,17 +74,17 @@ BOOL _UTF8_ModRight(struct UTF8IFace *Self,
 		_len = _max_len;
 	}
 
-	pos = Self->GetOffsetSize( *UTF8, _start);
+	pos = _UTF8_GetOffsetSize( *UTF8, _start);
 	if (pos == -1) return FALSE;
 
-	size = Self->GetOffsetSize( *UTF8+pos,_len) ;
+	size = _UTF8_GetOffsetSize( *UTF8+pos,_len) ;
 	if (size == -1) return FALSE;
 
-	temp = (unsigned char *) libBase -> IExec -> AllocVecTags( size+1 , AVT_Type, flags, TAG_END );
+	temp = (unsigned char *) AllocVecTags( size+1 , AVT_Type, flags, TAG_END );
 	if (temp)
 	{
-		libBase -> IExec -> CopyMem( *UTF8 + pos, temp, size );
-		libBase -> IExec -> FreeVec( *UTF8 );
+		CopyMem( *UTF8 + pos, temp, size );
+		FreeVec( *UTF8 );
 		temp[size] = 0;
 		*UTF8 =temp;
 		ret = TRUE;

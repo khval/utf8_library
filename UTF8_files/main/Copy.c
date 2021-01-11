@@ -59,14 +59,14 @@
 
 unsigned char * _UTF8_Copy(struct UTF8IFace *Self,unsigned char *UTF8, ULONG mem_flags )
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	int size;
 	unsigned char *ret;
 
-	size = Self->GetSize( UTF8 ) ;
+	size = _UTF8_GetSize( UTF8 ) ;
 	if (size == -1) return NULL;
 
-	ret = (unsigned char *) libBase -> IExec -> AllocVecTags( size ,AVT_Type,  mem_flags, TAG_END );
+	ret = (unsigned char *) AllocVecTags( size ,AVT_Type,  mem_flags, TAG_END );
 	if (ret)
 	{
 		libBase->IExec->CopyMem(UTF8,ret,size);

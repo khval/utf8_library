@@ -69,24 +69,24 @@ unsigned char * VARARGS68K _UTF8_Merge(struct UTF8IFace *Self,ULONG mem_flag, ..
 	unsigned char *tmp;
 	int size,pos,n;
 
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 
 	size = 1;
 	for (n=0; args[n]; n++)
 	{
-		size += Self -> GetSize( args[n] ) -1;
+		size += _UTF8_GetSize( args[n] ) -1;
 	}
 
-	tmp = (unsigned char *) libBase -> IExec -> AllocVec( size, mem_flag | MEMF_CLEAR );
+	tmp = (unsigned char *) AllocVec( size, mem_flag | MEMF_CLEAR );
 	if (tmp)
 	{
 		pos = 0;
 		for (n=0; args[n]; n++)
 		{
-			size = Self -> GetSize( args[n] );
+			size = _UTF8_GetSize( args[n] );
 			if (size == -1) break;
 
-			libBase -> IExec -> CopyMem(  args[n], tmp+pos  , size);
+			CopyMem(  args[n], tmp+pos  , size);
 			pos += size - 1; // remove overwrite /0
 		}
 	}

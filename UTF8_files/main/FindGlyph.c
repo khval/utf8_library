@@ -60,11 +60,11 @@ ULONG _UTF8_FindGlyph(struct UTF8IFace *Self,unsigned char *UTF8_alphabet, ULONG
 {
 	int len, a, alen;
 	
-	alen = Self-> Length( UTF8_alphabet );
+	alen = _UTF8_ Length( UTF8_alphabet );
 
 	for (a=0;a<alen;a++)
 	{
-		if (glyph == Self->GetGlyphAt( UTF8_alphabet, a, &len))
+		if (glyph == _UTF8_GetGlyphAt( UTF8_alphabet, a, &len))
 		{
 			return a;
 		}

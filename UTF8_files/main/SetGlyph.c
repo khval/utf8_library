@@ -63,7 +63,7 @@ ULONG _UTF8_SetGlyph(struct UTF8IFace *Self,
  	unsigned char prefix[] = {0x0,0xC0,0xE0,0xF0,0xF8,0xFC,0xFE};
 	int n;
 
-	int bytes = Self -> EstimateByteSize(glyph);
+	int bytes = _UTF8_EstimateByteSize(glyph);
 
 	for ( n = bytes-1; n>0; n-- )
 	{

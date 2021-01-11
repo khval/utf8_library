@@ -59,7 +59,7 @@
 
 BOOL _UTF8_ModTrim(struct UTF8IFace *Self, unsigned char **UTF8, ULONG mem_flags )
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	BOOL ret = FALSE;
 	int _start =0;
 	int _end = -1;
@@ -78,11 +78,11 @@ BOOL _UTF8_ModTrim(struct UTF8IFace *Self, unsigned char **UTF8, ULONG mem_flags
 	}
 	_len =_end-_start+1;
 
-	temp = (unsigned char *) libBase -> IExec -> AllocVecTags( _len + 1, AVT_Type, mem_flags, TAG_END );
+	temp = (unsigned char *) AllocVecTags( _len + 1, AVT_Type, mem_flags, TAG_END );
 	if (temp)
 	{
 		libBase->IExec -> CopyMem( *UTF8+_start, temp, _len );
-		libBase -> IExec -> FreeVec( *UTF8 );
+		FreeVec( *UTF8 );
 		temp[_len] = 0;
 		*UTF8 =temp;
 		ret = TRUE;

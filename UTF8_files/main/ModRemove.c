@@ -59,22 +59,22 @@
 
 BOOL _UTF8_ModRemove(struct UTF8IFace *Self,	unsigned char **UTF8, int _start, int _len, ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
 	int size_before, size_to_remove, size;
 	BOOL ret=FALSE;
 	unsigned char *temp;
 
-	size = Self->GetSize(*UTF8);
+	size = _UTF8_GetSize(*UTF8);
 
-	size_before = Self->GetOffsetSize(*UTF8, _start);
+	size_before = _UTF8_GetOffsetSize(*UTF8, _start);
 	if (size_before==-1) return FALSE;
 
-	size_to_remove = Self->GetOffsetSize(*UTF8 + size_before, _len);
+	size_to_remove = _UTF8_GetOffsetSize(*UTF8 + size_before, _len);
 	if (size_to_remove==-1) return FALSE;
 
 	// we most be care full not remove \0 from string, need one extra byte.
 
-	temp = (unsigned char *) libBase -> IExec -> AllocVecTags(size - size_to_remove + 1, AVT_Type, flags, TAG_END );
+	temp = (unsigned char *) AllocVecTags(size - size_to_remove + 1, AVT_Type, flags, TAG_END );
 	if (temp)
 	{
 		libBase->IExec->CopyMem(*UTF8,temp,size_before);
