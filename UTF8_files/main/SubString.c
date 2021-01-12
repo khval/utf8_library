@@ -75,7 +75,7 @@ unsigned char * _UTF8_SubString(struct UTF8IFace *Self,
 	ret = (unsigned char *) AllocVecTags( size+1 , AVT_Type, mem_flags, TAG_END);
 	if (ret)
 	{
-		CopyMem(Self,UTF8+pos,ret,size);
+		CopyMem(UTF8+pos,ret,size);
 		ret[size] = 0;
 	}
 
