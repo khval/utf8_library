@@ -55,8 +55,7 @@
 *
 */
 
-int _UTF8_EstimateByteSize(struct UTF8IFace *Self,
-       ULONG glyph)
+int _UTF8_EstimateByteSize(struct UTF8IFace *Self, ULONG glyph)
 {
  	int n;
 	int bytes_to_bits[] = {7,11,16,21,26,31};

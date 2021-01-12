@@ -63,13 +63,13 @@ BOOL _UTF8_ModToUpper(struct UTF8IFace *Self,
 	unsigned char **UTF8, unsigned char *alphabet_UTF8, ULONG mem_flags )
 {
 //	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
-	int alen = _UTF8_Length( alphabet_UTF8 );
+	int alen = _UTF8_Length( Self, alphabet_UTF8 );
 	int halen = alen /2;
 	int len, n,a,pos = 0;
 
 	if ((alen&1)||(alen==0)) return FALSE;
 
-	int tlen =  _UTF8_Length( *UTF8 );
+	int tlen =  _UTF8_Length( Self, *UTF8 );
 	int size;
 	unsigned char *new_utf8;
 	ULONG glyph;
@@ -79,14 +79,14 @@ BOOL _UTF8_ModToUpper(struct UTF8IFace *Self,
 
 	for (n=0;n<tlen;n++)
 	{
-		glyph = _UTF8_GetGlyph( *UTF8 + pos, &len );
+		glyph = _UTF8_GetGlyph( Self, *UTF8 + pos, &len );
 		pos += len;
 
 		for (a=0;a<halen;a++)
 		{
-			if (glyph == _UTF8_GetGlyphAt( alphabet_UTF8, a, &len))
+			if (glyph == _UTF8_GetGlyphAt( Self, alphabet_UTF8, a, &len))
 			{
-				glyph = _UTF8_GetGlyphAt( alphabet_UTF8, halen+a, &len);
+				glyph = _UTF8_GetGlyphAt( Self, alphabet_UTF8, halen+a, &len);
 			}
 		}
 
@@ -96,7 +96,7 @@ BOOL _UTF8_ModToUpper(struct UTF8IFace *Self,
 	size = 1;
 	for (n=0;n<tlen;n++)
 	{
-		len = _UTF8_EstimateByteSize( temp[n] );
+		len = _UTF8_EstimateByteSize( Self, temp[n] );
 		size += len;
 	}
 
@@ -106,7 +106,7 @@ BOOL _UTF8_ModToUpper(struct UTF8IFace *Self,
 		pos = 0;
 		for (n=0;n<tlen;n++)
 		{
-			pos += _UTF8_SetGlyph( temp[n], new_utf8 + pos );
+			pos += _UTF8_SetGlyph( Self, temp[n], new_utf8 + pos );
 		}
 		new_utf8[pos] = 0;
 

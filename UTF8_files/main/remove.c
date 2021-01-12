@@ -66,19 +66,19 @@ unsigned char * _UTF8_Remove(struct UTF8IFace *Self,
 	int size_before, size_to_remove, size;
 	unsigned char *temp;
 
-	size = _UTF8_GetSize(UTF8);
+	size = _UTF8_GetSize( Self, UTF8);
 
-	size_before = _UTF8_GetOffsetSize(UTF8, _start);
+	size_before = _UTF8_GetOffsetSize( Self, UTF8, _start);
 	if (size_before==-1) return NULL;
 
-	size_to_remove = _UTF8_GetOffsetSize(UTF8 + size_before, _len);
+	size_to_remove = _UTF8_GetOffsetSize( Self, UTF8 + size_before, _len);
 	if (size_to_remove==-1) return NULL;
 
 	temp = (unsigned char *) AllocVec(size - size_to_remove, MEMF_CLEAR | flags);
 	if (temp)
 	{
-		libBase->IExec->CopyMem(UTF8,temp,size_before);
-		libBase->IExec->CopyMem(UTF8+size_before+size_to_remove,temp+size_before,size - (size_before+size_to_remove) );
+		CopyMem(UTF8,temp,size_before);
+		CopyMem(UTF8+size_before+size_to_remove,temp+size_before,size - (size_before+size_to_remove) );
 	}
 
 	return temp;

@@ -65,7 +65,7 @@ ULONG _UTF8_GetOffsetSize(struct UTF8IFace *Self,  unsigned char * UTF8, int to_
 	offset = 0;
 	for (n=0;n<to_pos;n++)
 	{
-		value = _UTF8_GetGlyph( UTF8 + offset, &len );
+		value = _UTF8_GetGlyph( Self, UTF8 + offset, &len );
 		offset += len;
 		if (value == 0) return -1;
 	}

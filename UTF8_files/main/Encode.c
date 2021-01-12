@@ -86,7 +86,7 @@ unsigned char * _UTF8_Encode(struct UTF8IFace *Self, ULONG *codeset_page, char *
 	{
 		size = 0;
 		for (c = (unsigned char *) ascii; *c ; c++ )
-			size += _UTF8_EstimateByteSize( codeset_page[  *c ] );
+			size += _UTF8_EstimateByteSize( Self, codeset_page[  *c ] );
 
 		utf8 = AllocVecTags(size+2, AVT_Type, mem_flags, TAG_END );
 		if (utf8)

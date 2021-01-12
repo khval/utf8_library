@@ -63,15 +63,15 @@ int _UTF8_IndexOf(struct UTF8IFace *Self, unsigned char * UTF8,unsigned char *fi
 	int lena,lenb = 0;
 	int valuea,valueb;
 
-	ULONG Self_len = _UTF8_Length(UTF8);
-	ULONG find_len = _UTF8_Length(find);
+	ULONG Self_len = _UTF8_Length( Self, UTF8 );
+	ULONG find_len = _UTF8_Length( Self, find);
 
 	if ((find_len == 0)||(Self_len == 0)) return -1;
 
 	for (pos = 0; pos<Self_len; pos++)
 	{
-		valuea = _UTF8_GetGlyphAt(UTF8,pos,&lena);
-		valueb = _UTF8_GetGlyphAt(find,cnt,&lenb);
+		valuea = _UTF8_GetGlyphAt( Self, UTF8,pos,&lena);
+		valueb = _UTF8_GetGlyphAt( Self, find,cnt,&lenb);
 
 		if ((lena==0)||(lenb==0)) return -1;
 

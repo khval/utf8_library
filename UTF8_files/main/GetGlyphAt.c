@@ -64,7 +64,7 @@ ULONG _UTF8_GetGlyphAt(struct UTF8IFace *Self,  unsigned char *UTF8, int _pos, i
 	ULONG ret;
 	do
 	{
-		ret = _UTF8_GetGlyph( UTF8 + pos, len ) ;
+		ret = _UTF8_GetGlyph( Self, UTF8 + pos, len ) ;
 		if (len == 0) return 0;
 		pos += *len;
 		bpos++;

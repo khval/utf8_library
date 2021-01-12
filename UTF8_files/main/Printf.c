@@ -140,7 +140,7 @@ void VARARGS68K _UTF8_Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigne
 	char *arg_str;
 	unsigned char *tmp;
 
-	fmt = _UTF8_Decode( codeset_page, utf8_fmt, MEMF_PRIVATE );
+	fmt = _UTF8_Decode( Self, codeset_page, utf8_fmt, MEMF_PRIVATE );
 	if (fmt)
 	{
 		buffer = (char *) AllocVec( _UTF8_GetSize ( Self, utf8_fmt) ,MEMF_PRIVATE | MEMF_CLEAR );
@@ -169,7 +169,7 @@ void VARARGS68K _UTF8_Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigne
 
 							tmp =  va_arg(list,unsigned char *);
 
-							arg_str = _UTF8_Decode( codeset_page, tmp , MEMF_PRIVATE );
+							arg_str = _UTF8_Decode( Self, codeset_page, tmp , MEMF_PRIVATE );
 							if (arg_str)
 							{
 								Printf("%s",arg_str);
