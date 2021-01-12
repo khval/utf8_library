@@ -27,20 +27,20 @@ extern char *			_UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsign
 
 extern char *			_UTF8_DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char * UTF8, ULONG bytes, ULONG flags );
 
-extern unsigned char *	_UTF8_Encode(struct UTF8IFace *, char * ascii, ULONG codeset_page);
-extern ULONG			_UTF8_EstimateByteSize(struct UTF8IFace *, ULONG glyph);
+extern unsigned char *	_UTF8_Encode(struct UTF8IFace *Self, ULONG *codeset_page, char * ascii, ULONG mem_flags);
+extern int				_UTF8_EstimateByteSize(struct UTF8IFace *, ULONG glyph);
 
 extern ULONG			_UTF8_FindGlyph( struct UTF8IFace *, unsigned char *UTF8_alphabet, ULONG value_one );
 
 extern ULONG			_UTF8_GetGlyph(struct UTF8IFace *, unsigned char *data, int *len);
 extern ULONG			_UTF8_GetGlyphAt(struct UTF8IFace *, unsigned char *data, int pos, int *len);
-extern int              		_UTF8_GetOffsetSize(struct UTF8IFace *, unsigned char * UTF8, int to_pos);
-extern int              		_UTF8_GetSize(struct UTF8IFace *, unsigned char * UTF8);
-extern int				_UTF8_IndexOf (struct UTF8IFace *Self, unsigned char * utf8);
+extern ULONG           		_UTF8_GetOffsetSize(struct UTF8IFace *, unsigned char * UTF8, int to_pos);
+extern ULONG           		_UTF8_GetSize(struct UTF8IFace *self, unsigned char *UTF8);
+extern int				_UTF8_IndexOf (struct UTF8IFace *Self, unsigned char * utf8,unsigned char *find);
 extern unsigned char *	_UTF8_Insert (struct UTF8IFace *Self,unsigned char *UTF8, int _start, unsigned char *UTF8_insert , ULONG flags );
 extern unsigned char *	_UTF8_Left (struct UTF8IFace *Self, unsigned char *UTF8, int _len, ULONG mem_flags );
 extern ULONG			_UTF8_Length(struct UTF8IFace *Self,unsigned char * UTF8);
-extern void 			VARARGS68K _UTF8_Merge (struct UTF8IFace *Self, ULONG mem_flags, ... );
+extern unsigned char *	VARARGS68K _UTF8_Merge (struct UTF8IFace *Self, ULONG mem_flags, ... );
 extern BOOL			_UTF8_ModInsert(struct UTF8IFace *Self, unsigned char **UTF8, int _start, unsigned char *UTF8_insert , ULONG flags );
 extern BOOL			_UTF8_ModLeft (struct UTF8IFace *Self, unsigned char *UTF8, int _len, ULONG mem_flags );
 extern BOOL			_UTF8_ModRemove(struct UTF8IFace *Self,	unsigned char **UTF8, int _start, int _len, ULONG flags );
@@ -51,7 +51,7 @@ extern BOOL			_UTF8_ModToUpper(struct UTF8IFace *, unsigned char **UTF8,unsigned
 extern BOOL			_UTF8_ModTrim(struct UTF8IFace *Self, unsigned char **UTF8, ULONG mem_flags );
 extern void 			VARARGS68K _UTF8_Printf (struct UTF8IFace *Self,ULONG *codeset_page, unsigned char *utf8_fmt, ...);
 extern unsigned char *	_UTF8_Remove(struct UTF8IFace *Self,unsigned char *UTF8, int _start, int _len, ULONG flags );
-extern unsigned char *	_UTF8_Right ( unsigned char *UTF8, int _len, ULONG mem_flags );
+extern unsigned char *	_UTF8_Right ( struct UTF8IFace *Self, unsigned char *UTF8, int _len, ULONG mem_flags );
 extern ULONG			_UTF8_SetGlyph(struct UTF8IFace *, ULONG glyph, unsigned char * data);
 extern unsigned char *	_UTF8_SubString(struct UTF8IFace *Self,	unsigned char *UTF8, int _start, int _len, ULONG mem_flags );
 extern unsigned char *	_UTF8_ToLower(struct UTF8IFace *, unsigned char *alphabet_UTF8, unsigned char * UTF8, ULONG mem_flags);
