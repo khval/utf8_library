@@ -60,6 +60,10 @@ init.o: init.c libbase.h UTF8.library_rev.h UTF8_vectors.c include/interfaces/UT
 	gcc  -Wall -O3  -Iinclude    -c -o init.o init.c
 
 
+%.o:		%.c
+	gcc  -Wall -O3  $(INC) $(DEBUG) -c  -D__USE_INLINE__ -D__no_stdlib__ $(@:.o=.c) -o $@
+
+
 .PHONY: revision
 revision:
 	bumprev $(VERSION) $(TARGET)
