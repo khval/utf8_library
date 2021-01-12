@@ -25,6 +25,8 @@
 #include <libraries/UTF8.h>
 #include <proto/UTF8.h>
 #include <stdarg.h>
+#include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Length ******************************************
 *

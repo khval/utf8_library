@@ -26,6 +26,7 @@
 #include <proto/UTF8.h>
 #include <stdarg.h>
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Encode ******************************************
 *
@@ -59,27 +60,25 @@
 
 unsigned char * _UTF8_Encode(struct UTF8IFace *Self, ULONG *codeset_page, char * ascii, ULONG mem_flags)
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+////	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 
 	unsigned char *c;
 	unsigned char *utf8 = NULL;
 	int size,pos;
 
-	if ( ! libBase ) return NULL;
-	if ( ! libBase -> IExec ) return NULL;
 	if ( ! ascii ) return NULL;
 	if ( ! codeset_page ) 
 	{
 		size = 0;
 		for (c = (unsigned char *) ascii; *c ; c++ )
-			size += _UTF8_EstimateByteSize( *c );
+			size += _UTF8_EstimateByteSize( Self, *c );
 
 		utf8 = AllocVecTags(size+2, AVT_Type, mem_flags, TAG_END );
 		if (utf8)
 		{
 			pos = 0;
 			for (c = (unsigned char *) ascii; *c ; c++ )
-				pos += _UTF8_ SetGlyph( *c, utf8 + pos );
+				pos += _UTF8_SetGlyph( Self, *c, utf8 + pos );
 			utf8[pos] = 0;
 		}
 	}
@@ -94,7 +93,7 @@ unsigned char * _UTF8_Encode(struct UTF8IFace *Self, ULONG *codeset_page, char *
 		{
 			pos = 0;
 			for (c = (unsigned char *) ascii; *c ; c++ )
-				pos += _UTF8_ SetGlyph( codeset_page[  *c ], utf8 + pos );
+				pos += _UTF8_SetGlyph( Self, codeset_page[  *c ], utf8 + pos );
 			utf8[pos] = 0;
 		}
 	}

@@ -26,9 +26,8 @@
 #include <libraries/UTF8.h>
 #include <proto/UTF8.h>
 #include <stdarg.h>
-
-
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Encode ******************************************
 *
@@ -132,7 +131,7 @@ void VARARGS68K _UTF8_Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigne
 {
 	va_list list;
 	va_startlinear(list, utf8_fmt);
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	const char *fmt_list[]={"%s","%u","%d","%i","%lld","%f","%h", NULL};
 	char *fmt;
 	char fmt_buffer[6];
@@ -141,14 +140,10 @@ void VARARGS68K _UTF8_Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigne
 	char *arg_str;
 	unsigned char *tmp;
 
-	// Exit function if DOS.library is not open..
-	if (!libBase -> IDOS) return;
-
-
 	fmt = _UTF8_Decode( codeset_page, utf8_fmt, MEMF_PRIVATE );
 	if (fmt)
 	{
-		buffer = (char *) AllocVec( _UTF8_GetSize ( utf8_fmt) ,MEMF_PRIVATE | MEMF_CLEAR );
+		buffer = (char *) AllocVec( _UTF8_GetSize ( Self, utf8_fmt) ,MEMF_PRIVATE | MEMF_CLEAR );
 	}
 
 	if ((fmt)&&(buffer))
@@ -164,7 +159,7 @@ void VARARGS68K _UTF8_Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigne
 					*b = 0;		// null term.
 					b = buffer;	// reset buffer cnt.
 
-					libBase -> IDOS -> Printf("%s",buffer);
+					Printf("%s",buffer);
 
 					f += get_format( f, fmt_buffer );
 
@@ -177,24 +172,24 @@ void VARARGS68K _UTF8_Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigne
 							arg_str = _UTF8_Decode( codeset_page, tmp , MEMF_PRIVATE );
 							if (arg_str)
 							{
-								libBase -> IDOS -> Printf("%s",arg_str);
+								Printf("%s",arg_str);
 								FreeVec(arg_str);
 							}
 
 					 		DebugPrintF("We are done decoding the string \n");
 							break;
 						case sw_uint32:
-							libBase -> IDOS -> Printf("%lu", va_arg(list,ULONG)); break;
+							Printf("%lu", va_arg(list,ULONG)); break;
 						case sw_des32:
-							libBase -> IDOS -> Printf("%ld", va_arg(list,int)); break;
+							Printf("%ld", va_arg(list,int)); break;
 						case sw_int32:
-							libBase -> IDOS -> Printf("%ld", va_arg(list,int)); break;
+							Printf("%ld", va_arg(list,int)); break;
 						case sw_int64:
-							libBase -> IDOS -> Printf(fmt_buffer, va_arg(list,long long int)); break;
+							Printf(fmt_buffer, va_arg(list,long long int)); break;
 						case sw_short:
-							libBase -> IDOS -> Printf(fmt_buffer, va_arg(list,int)); break;
+							Printf(fmt_buffer, va_arg(list,int)); break;
 						default:
-							libBase -> IDOS -> Printf(fmt_buffer, va_arg(list,ULONG)); break;
+							Printf(fmt_buffer, va_arg(list,ULONG)); break;
 					}
 
 					break;
@@ -208,7 +203,7 @@ void VARARGS68K _UTF8_Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigne
 		*b = 0;		// null term.
 	}
 
-	libBase -> IDOS -> Printf("%s",buffer);
+	Printf("%s",buffer);
 
 	if (buffer) FreeVec(buffer);
 	if (fmt) FreeVec(fmt);

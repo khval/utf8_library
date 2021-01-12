@@ -26,6 +26,8 @@
 #include <proto/UTF8.h>
 #include <stdarg.h>
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
+
 
 /****** UTF8/main/GetGlyph ******************************************
 *
@@ -58,7 +60,7 @@
 
 BOOL _UTF8_ModInsert(struct UTF8IFace *Self, unsigned char **UTF8, int _start, unsigned char *UTF8_insert , ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	BOOL ret = FALSE;
 	int size, size_before, size_insert;
 	unsigned char *temp;

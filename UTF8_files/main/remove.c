@@ -27,6 +27,7 @@
 #include <proto/UTF8.h>
 #include <stdarg.h>
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Encode ******************************************
 *
@@ -61,7 +62,7 @@
 unsigned char * _UTF8_Remove(struct UTF8IFace *Self,
 		unsigned char *UTF8, int _start, int _len, ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	int size_before, size_to_remove, size;
 	unsigned char *temp;
 

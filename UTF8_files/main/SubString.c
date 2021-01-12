@@ -27,6 +27,7 @@
 #include <proto/UTF8.h>
 #include <stdarg.h>
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Encode ******************************************
 *
@@ -61,20 +62,20 @@
 unsigned char * _UTF8_SubString(struct UTF8IFace *Self,
 		unsigned char *UTF8, int _start, int _len, ULONG mem_flags )
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	int pos, size;
 	unsigned char *ret;
 
-	pos = _UTF8_GetOffsetSize( UTF8, _start);
+	pos = _UTF8_GetOffsetSize( Self, UTF8, _start);
 	if (pos == -1) return NULL;
 
-	size = _UTF8_GetOffsetSize( UTF8+pos,_len) ;
+	size = _UTF8_GetOffsetSize( Self, UTF8+pos,_len) ;
 	if (size == -1) return NULL;
 
 	ret = (unsigned char *) AllocVecTags( size+1 , AVT_Type, mem_flags, TAG_END);
 	if (ret)
 	{
-		libBase->IExec->CopyMem(UTF8+pos,ret,size);
+		CopyMem(Self,UTF8+pos,ret,size);
 		ret[size] = 0;
 	}
 

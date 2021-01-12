@@ -26,6 +26,7 @@
 #include <proto/UTF8.h>
 #include <stdarg.h>
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Encode ******************************************
 *
@@ -59,7 +60,7 @@
 
 unsigned char *_UTF8_Trim(struct UTF8IFace *Self, unsigned char *UTF8, ULONG mem_flags )
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	int _start =0;
 	int _end = -1;
 	int _len;
@@ -80,7 +81,7 @@ unsigned char *_UTF8_Trim(struct UTF8IFace *Self, unsigned char *UTF8, ULONG mem
 	temp = (unsigned char *) AllocVec( _len + 1, MEMF_CLEAR | mem_flags );
 	if (temp)
 	{
-		libBase->IExec -> CopyMem( UTF8+_start, temp, _len );
+		CopyMem( UTF8+_start, temp, _len );
 	}
 
 	return temp;

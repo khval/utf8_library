@@ -26,6 +26,7 @@
 #include <proto/UTF8.h>
 #include <stdarg.h>
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Decode ******************************************
 *
@@ -59,7 +60,7 @@
 
 char * _UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char * UTF8, ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	char *c;
 	char *new_str = NULL;
 	int pos,n=0,len;
@@ -68,7 +69,7 @@ char * _UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char *
 
 	if (!UTF8) return NULL;
 
-	size =  _UTF8_Length( UTF8 ) + 1;
+	size =  _UTF8_Length( Self, UTF8 ) + 1;
 
 	DebugPrintF(" _UTF8_Decode UTF8 string len = %d \n", size);  
 
@@ -85,7 +86,7 @@ char * _UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char *
 		{
 			do
 			{
-				ret = _UTF8_GetGlyph( UTF8 + pos, &len ) ;
+				ret = _UTF8_GetGlyph( Self, UTF8 + pos, &len ) ;
 				pos += len;
 				*c = ret < 256 ? (char) ret : '#';
 				c++;
@@ -95,7 +96,7 @@ char * _UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char *
 		{
 			do
 			{
-				ret = _UTF8_GetGlyph( UTF8 + pos, &len ) ;
+				ret = _UTF8_GetGlyph( Self, UTF8 + pos, &len ) ;
 				pos += len;
 
 				*c = '#';	// default value if glyph is not found.
@@ -114,7 +115,7 @@ char * _UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char *
 
 char * _UTF8_DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char * UTF8, ULONG bytes, ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+////	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	char *c;
 	char *new_str = NULL;
 	int pos,n=0,len;
@@ -123,13 +124,14 @@ char * _UTF8_DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned cha
 
 	if (!UTF8) return NULL;
 
-	size =  _UTF8_Length( UTF8 ) + 1;
+	size =  _UTF8_Length( Self, UTF8 ) + 1;
 
 	DebugPrintF(" _UTF8_Decode UTF8 string len = %d \n", size);  
 
-	new_str =  AllocVecTags(size+100, 
-					AVT_Type, flags,
-					TAG_END );
+	// we don't know the exact size, we need assume worst case, due bit loss we can expect 5 bytes. and \0 byte
+
+	new_str =  AllocVecTags(size*5+1, 	AVT_Type, flags, TAG_END );	
+
 	if (new_str)
 	{
 		c = new_str;
@@ -139,7 +141,7 @@ char * _UTF8_DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned cha
 		{
 			do
 			{
-				ret = _UTF8_GetGlyph( UTF8 + pos, &len ) ;
+				ret = _UTF8_GetGlyph( Self, UTF8 + pos, &len ) ;
 				pos += len;
 				bytes -= len;
 				*c = ret < 256 ? (char) ret : '#';
@@ -150,7 +152,7 @@ char * _UTF8_DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned cha
 		{
 			do
 			{
-				ret = _UTF8_GetGlyph( UTF8 + pos, &len ) ;
+				ret = _UTF8_GetGlyph( Self, UTF8 + pos, &len ) ;
 				pos += len;
 				bytes -= len;
 

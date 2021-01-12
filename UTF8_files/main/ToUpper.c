@@ -26,6 +26,7 @@
 #include <proto/UTF8.h>
 #include <stdarg.h>
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Encode ******************************************
 *
@@ -57,33 +58,33 @@
 */
 
 
-unsigned char * _UTF8_ToUpper(struct UTF8IFace *Self, unsigned char *alphabet_UTF8, unsigned char *UTF8 )
+unsigned char * _UTF8_ToUpper(struct UTF8IFace *Self, unsigned char *alphabet_UTF8, unsigned char *UTF8, ULONG mem_flags )
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
-	int alen = _UTF8_Length( alphabet_UTF8 );
+//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+	int alen = _UTF8_Length( Self, alphabet_UTF8 );
 	int halen = alen /2;
 	int len, n,a,pos = 0;
 
 	if ((alen&1)||(alen==0)) return NULL;
 
-	int tlen =  _UTF8_Length( UTF8 );
+	int tlen =  _UTF8_Length( Self, UTF8 );
 	int size;
 	unsigned char *new_utf8;
 	ULONG glyph;
 
-	ULONG *temp = (ULONG *) libBase-> IExec -> AllocVecTags( sizeof( ULONG ) * tlen,  AVT_Type, MEMF_SHARED, TAG_END );
+	ULONG *temp = (ULONG *) AllocVecTags( 5 * tlen + 1,  AVT_Type, mem_flags, TAG_END );
 	if (!temp) return FALSE;
 
 	for (n=0;n<tlen;n++)
 	{
-		glyph = _UTF8_GetGlyph( UTF8 + pos, &len );
+		glyph = _UTF8_GetGlyph( Self, UTF8 + pos, &len );
 		pos += len;
 
 		for (a=0;a<halen;a++)
 		{
-			if (glyph == _UTF8_GetGlyphAt( alphabet_UTF8, a, &len))
+			if (glyph == _UTF8_GetGlyphAt( Self,alphabet_UTF8, a, &len))
 			{
-				glyph = _UTF8_GetGlyphAt( alphabet_UTF8, halen+a, &len);
+				glyph = _UTF8_GetGlyphAt( Self, alphabet_UTF8, halen+a, &len);
 			}
 		}
 
@@ -93,17 +94,17 @@ unsigned char * _UTF8_ToUpper(struct UTF8IFace *Self, unsigned char *alphabet_UT
 	size = 1;
 	for (n=0;n<tlen;n++)
 	{
-		len = _UTF8_EstimateByteSize( temp[n] );
+		len = _UTF8_EstimateByteSize( Self, temp[n] );
 		size += len;
 	}
 
-	new_utf8 = (unsigned char *) AllocVecTags(size+100,  AVT_Type, MEMF_SHARED, TAG_END );
+	new_utf8 = (unsigned char *) AllocVecTags(size+100,  AVT_Type, mem_flags, TAG_END );
 	if (new_utf8)
 	{
 		pos = 0;
 		for (n=0;n<tlen;n++)
 		{
-			pos += _UTF8_SetGlyph( temp[n], new_utf8 + pos );
+			pos += _UTF8_SetGlyph( Self, temp[n], new_utf8 + pos );
 		}
 		new_utf8[pos] = 0;
 

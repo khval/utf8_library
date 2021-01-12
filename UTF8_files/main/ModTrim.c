@@ -26,6 +26,7 @@
 #include <proto/UTF8.h>
 #include <stdarg.h>
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Encode ******************************************
 *
@@ -59,7 +60,7 @@
 
 BOOL _UTF8_ModTrim(struct UTF8IFace *Self, unsigned char **UTF8, ULONG mem_flags )
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	BOOL ret = FALSE;
 	int _start =0;
 	int _end = -1;
@@ -81,7 +82,7 @@ BOOL _UTF8_ModTrim(struct UTF8IFace *Self, unsigned char **UTF8, ULONG mem_flags
 	temp = (unsigned char *) AllocVecTags( _len + 1, AVT_Type, mem_flags, TAG_END );
 	if (temp)
 	{
-		libBase->IExec -> CopyMem( *UTF8+_start, temp, _len );
+		CopyMem( *UTF8+_start, temp, _len );
 		FreeVec( *UTF8 );
 		temp[_len] = 0;
 		*UTF8 =temp;

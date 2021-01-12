@@ -26,6 +26,7 @@
 #include <proto/UTF8.h>
 #include <stdarg.h>
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Encode ******************************************
 *
@@ -60,7 +61,7 @@
 BOOL _UTF8_ModRight(struct UTF8IFace *Self,
 		unsigned char **UTF8, int _len, ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	int pos =0;
 	int size;
 	BOOL ret = FALSE;

@@ -26,6 +26,7 @@
 #include <proto/UTF8.h>
 #include <stdarg.h>
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Encode ******************************************
 *
@@ -60,13 +61,13 @@
 unsigned char * _UTF8_Right(struct UTF8IFace *Self,
 		unsigned char *UTF8, int _len, ULONG flags )
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	int pos =0;
 	int size;
 	int n,len;
 	ULONG value;
 	unsigned char *ret;
-	int _max_len = _UTF8_Length( UTF8 ) ;
+	int _max_len = _UTF8_Length( Self, UTF8 ) ;
 	int _start = _max_len  - _len; 
 
 	if (_start<0)
@@ -78,7 +79,7 @@ unsigned char * _UTF8_Right(struct UTF8IFace *Self,
 	pos = 0;
 	for (n=0;n<_start;n++)
 	{
-		value = _UTF8_GetGlyph( UTF8 + pos, &len );
+		value = _UTF8_GetGlyph( Self, UTF8 + pos, &len );
 		pos += len;
 		if (value == 0) return NULL;
 	}
@@ -86,7 +87,7 @@ unsigned char * _UTF8_Right(struct UTF8IFace *Self,
 	size = 0;
 	for (n=0;n<_len;n++)
 	{
-		value = _UTF8_GetGlyph( UTF8 + pos + size, &len );
+		value = _UTF8_GetGlyph( Self, UTF8 + pos + size, &len );
 		size += len;
 		if (value == 0) return NULL;
 	}

@@ -26,6 +26,8 @@
 #include <libraries/UTF8.h>
 #include <proto/UTF8.h>
 #include <stdarg.h>
+#include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/SetGlyph ******************************************
 *
@@ -63,7 +65,7 @@ ULONG _UTF8_SetGlyph(struct UTF8IFace *Self,
  	unsigned char prefix[] = {0x0,0xC0,0xE0,0xF0,0xF8,0xFC,0xFE};
 	int n;
 
-	int bytes = _UTF8_EstimateByteSize(glyph);
+	int bytes = _UTF8_EstimateByteSize( Self, glyph );
 
 	for ( n = bytes-1; n>0; n-- )
 	{

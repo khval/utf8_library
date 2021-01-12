@@ -25,6 +25,8 @@
 #include <libraries/UTF8.h>
 #include <proto/UTF8.h>
 #include <stdarg.h>
+#include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Release ******************************************
 *
@@ -55,6 +57,6 @@
 
 ULONG _UTF8_Release(struct UTF8IFace *Self)
 {
-    return _UTF8_Data.RefCount--;
+    return Self -> Data.RefCount--;
 }
 

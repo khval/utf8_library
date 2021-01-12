@@ -57,7 +57,7 @@
 
 ULONG _UTF8_Obtain(struct UTF8IFace *Self)
 {
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
+	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
     return libBase -> MainCnt++;
 }
 

@@ -29,6 +29,7 @@
 
 
 #include "../libbase.h"
+#include "../UTF8_vectors.h"
 
 /****** UTF8/main/Encode ******************************************
 *
@@ -69,12 +70,10 @@ unsigned char * VARARGS68K _UTF8_Merge(struct UTF8IFace *Self,ULONG mem_flag, ..
 	unsigned char *tmp;
 	int size,pos,n;
 
-	struct _Library *libBase = (struct _Library *) _UTF8_Data.LibBase;
-
 	size = 1;
 	for (n=0; args[n]; n++)
 	{
-		size += _UTF8_GetSize( args[n] ) -1;
+		size += _UTF8_GetSize( Self, args[n] ) -1;
 	}
 
 	tmp = (unsigned char *) AllocVec( size, mem_flag | MEMF_CLEAR );
@@ -83,7 +82,7 @@ unsigned char * VARARGS68K _UTF8_Merge(struct UTF8IFace *Self,ULONG mem_flag, ..
 		pos = 0;
 		for (n=0; args[n]; n++)
 		{
-			size = _UTF8_GetSize( args[n] );
+			size = _UTF8_GetSize( Self, args[n] );
 			if (size == -1) break;
 
 			CopyMem(  args[n], tmp+pos  , size);
