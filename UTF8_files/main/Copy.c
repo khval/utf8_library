@@ -64,13 +64,13 @@ unsigned char * _UTF8_Copy(struct UTF8IFace *Self,unsigned char *UTF8, ULONG mem
 	int size;
 	unsigned char *ret;
 
-	size = _UTF8_GetSize( UTF8 ) ;
+	size = _UTF8_GetSize( Self, UTF8 ) ;
 	if (size == -1) return NULL;
 
 	ret = (unsigned char *) AllocVecTags( size ,AVT_Type,  mem_flags, TAG_END );
 	if (ret)
 	{
-		libBase->IExec->CopyMem(UTF8,ret,size);
+		CopyMem(UTF8,ret,size);
 	}
 
 	return ret;

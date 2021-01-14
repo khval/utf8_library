@@ -65,12 +65,12 @@ BOOL _UTF8_ModRemove(struct UTF8IFace *Self,	unsigned char **UTF8, int _start, i
 	BOOL ret=FALSE;
 	unsigned char *temp;
 
-	size = _UTF8_GetSize(*UTF8);
+	size = _UTF8_GetSize(Self, *UTF8);
 
-	size_before = _UTF8_GetOffsetSize(*UTF8, _start);
+	size_before = _UTF8_GetOffsetSize(Self, *UTF8, _start);
 	if (size_before==-1) return FALSE;
 
-	size_to_remove = _UTF8_GetOffsetSize(*UTF8 + size_before, _len);
+	size_to_remove = _UTF8_GetOffsetSize(Self, *UTF8 + size_before, _len);
 	if (size_to_remove==-1) return FALSE;
 
 	// we most be care full not remove \0 from string, need one extra byte.
@@ -78,10 +78,10 @@ BOOL _UTF8_ModRemove(struct UTF8IFace *Self,	unsigned char **UTF8, int _start, i
 	temp = (unsigned char *) AllocVecTags(size - size_to_remove + 1, AVT_Type, flags, TAG_END );
 	if (temp)
 	{
-		libBase->IExec->CopyMem(*UTF8,temp,size_before);
-		libBase->IExec->CopyMem(*UTF8+size_before+size_to_remove,temp+size_before,size - (size_before+size_to_remove) );
+		CopyMem(*UTF8,temp,size_before);
+		CopyMem(*UTF8+size_before+size_to_remove,temp+size_before,size - (size_before+size_to_remove) );
 		temp[ size - size_to_remove ] = 0;
-		libBase->IExec->FreeVec(*UTF8);
+		FreeVec(*UTF8);
 		*UTF8=temp;
 		ret = TRUE;
 	}

@@ -58,15 +58,14 @@
 */
 
 
-BOOL _UTF8_ModRight(struct UTF8IFace *Self,
-		unsigned char **UTF8, int _len, ULONG flags )
+BOOL _UTF8_ModRight(struct UTF8IFace *Self, unsigned char **UTF8, int _len, ULONG flags )
 {
 //	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	int pos =0;
 	int size;
 	BOOL ret = FALSE;
 	unsigned char *temp;
-	int _max_len = _UTF8_Length( *UTF8 ) ;
+	int _max_len = _UTF8_Length( Self, *UTF8 ) ;
 	int _start = _max_len  - _len; 
 
 	if (_start<0)
@@ -75,10 +74,10 @@ BOOL _UTF8_ModRight(struct UTF8IFace *Self,
 		_len = _max_len;
 	}
 
-	pos = _UTF8_GetOffsetSize( *UTF8, _start);
+	pos = _UTF8_GetOffsetSize( Self, *UTF8, _start);
 	if (pos == -1) return FALSE;
 
-	size = _UTF8_GetOffsetSize( *UTF8+pos,_len) ;
+	size = _UTF8_GetOffsetSize( Self, *UTF8+pos,_len) ;
 	if (size == -1) return FALSE;
 
 	temp = (unsigned char *) AllocVecTags( size+1 , AVT_Type, flags, TAG_END );

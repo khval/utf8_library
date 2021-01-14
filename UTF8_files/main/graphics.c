@@ -52,12 +52,12 @@ BOOL glyph_size(struct UTF8IFace *Self, struct OutlineFont *ofont,float font_siz
 		return TRUE;
 	}
  
-	if (!(error = libBase -> IDiskfont -> ESetInfo( &ofont -> olf_EEngine,   
+	if (!(error = ESetInfo( &ofont -> olf_EEngine,   
 			OT_DeviceDPI, (XDPI << 16) | YDPI,
 			OT_PointHeight, 0x000010000 * (ULONG) font_size,
 		    	OT_GlyphCode, long_char_1, 	TAG_END)))
 	{
-		if( (error = libBase -> IDiskfont -> EObtainInfo( &ofont -> olf_EEngine, OT_GlyphMap, &glyph, TAG_END)) == 0)
+		if( (error = EObtainInfo( &ofont -> olf_EEngine, OT_GlyphMap, &glyph, TAG_END)) == 0)
 		{
 			if (glyph)
 			{
@@ -69,7 +69,7 @@ BOOL glyph_size(struct UTF8IFace *Self, struct OutlineFont *ofont,float font_siz
 				}
 			}
 
-			libBase -> IDiskfont -> EReleaseInfo( &ofont -> olf_EEngine, OT_GlyphMap, glyph,	TAG_END);
+			EReleaseInfo( &ofont -> olf_EEngine, OT_GlyphMap, glyph,	TAG_END);
 		}
 	}
 
@@ -90,19 +90,19 @@ int glyph_draw(struct UTF8IFace *Self,struct RastPort *rp, struct OutlineFont *o
 
 	if (long_char_1 == 0x20) return (ULONG) (font_size * 0.6f);
  
-	    if (!(error = libBase -> IDiskfont -> ESetInfo( &ofont -> olf_EEngine,   
+	    if (!(error = ESetInfo( &ofont -> olf_EEngine,   
 			OT_DeviceDPI, (XDPI << 16) | YDPI,
 			OT_PointHeight, 0x000010000 * (ULONG) font_size,
 		    	OT_GlyphCode, long_char_1, 	TAG_END)))
 	{
 
-		if( (error = libBase -> IDiskfont -> EObtainInfo( &ofont -> olf_EEngine, OT_GlyphMap, &glyph, TAG_END)) == 0)
+		if( (error = EObtainInfo( &ofont -> olf_EEngine, OT_GlyphMap, &glyph, TAG_END)) == 0)
 		{
 			if (glyph)
 			{
 				if ((rp)&&(glyph->glm_BitMap))
 				{
-					libBase -> IGraphics -> BltBitMapTags(
+					BltBitMapTags(
 						BLITA_SrcX, glyph->glm_BlackLeft,
 						BLITA_SrcY, glyph->glm_BlackTop,
 						BLITA_DestX, x - glyph->glm_X0 + glyph->glm_BlackLeft,
@@ -122,7 +122,7 @@ int glyph_draw(struct UTF8IFace *Self,struct RastPort *rp, struct OutlineFont *o
 				}
 			}
 
-			libBase -> IDiskfont -> EReleaseInfo( &ofont -> olf_EEngine, OT_GlyphMap, glyph,	TAG_END);
+			EReleaseInfo( &ofont -> olf_EEngine, OT_GlyphMap, glyph,	TAG_END);
 		}
 	}
 
@@ -139,7 +139,7 @@ void _UTF8_TextUTF8Extent( struct UTF8IFace *Self,struct OutlineFont *ofont, flo
 	ext -> te_Width = 0;
 	ext -> te_Height = 0;
 
-	for ( pos = 0; (glyph = _UTF8_GetGlyph( UTF8 + pos , &len )); )
+	for ( pos = 0; (glyph = _UTF8_GetGlyph( Self, UTF8 + pos , &len )); )
 	{
 		glyph_size( Self, ofont, font_size, glyph, &width, &height, &y0 );
 
@@ -167,7 +167,7 @@ void _UTF8_TextUTF8ExtentN( struct UTF8IFace *Self,struct OutlineFont *ofont, fl
 	pos = 0;
 	for ( ; n>0 ; n-- )
 	{
-		glyph = _UTF8_GetGlyph( UTF8 + pos , &len );
+		glyph = _UTF8_GetGlyph( Self, UTF8 + pos , &len );
 		glyph_size( Self, ofont, font_size, glyph, &width, &height, &y0 );
 
 		if (height > ext -> te_Height )
@@ -188,7 +188,7 @@ int _UTF8_TextUTF8Length( struct UTF8IFace *Self,struct OutlineFont *ofont, floa
 	ULONG xpos = 0;
 	int width, height, y0;
 
-	for ( pos = 0; (glyph = _UTF8_GetGlyph( UTF8 + pos , &len )); )
+	for ( pos = 0; (glyph = _UTF8_GetGlyph( Self, UTF8 + pos , &len )); )
 	{
 		glyph_size( Self, ofont, font_size, glyph, &width,&height,&y0 );
 		xpos +=width + 2;  
@@ -205,7 +205,7 @@ int _UTF8_TextUTF8LengthN( struct UTF8IFace *Self,struct OutlineFont *ofont, flo
 	ULONG xpos = 0;
 	int width, height, y0;
 
-	for ( pos = 0; ((glyph = _UTF8_GetGlyph( UTF8 + pos , &len ))&&(n-->0)); )
+	for ( pos = 0; ((glyph = _UTF8_GetGlyph( Self, UTF8 + pos , &len ))&&(n-->0)); )
 	{
 		glyph_size( Self, ofont, font_size, glyph, &width,&height,&y0 );
 		xpos +=width + 2;  
@@ -220,9 +220,9 @@ void _UTF8_TextUTF8( struct UTF8IFace *Self,struct RastPort *rp,struct OutlineFo
 	ULONG glyph, pos;
 	int len;
 //	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
-	ULONG w = libBase -> IGraphics ->GetBitMapAttr( rp -> BitMap, BMA_ACTUALWIDTH );
+	ULONG w = GetBitMapAttr( rp -> BitMap, BMA_ACTUALWIDTH );
 
-	for ( pos = 0; (glyph = _UTF8_GetGlyph( UTF8 + pos , &len )); )
+	for ( pos = 0; (glyph = _UTF8_GetGlyph( Self, UTF8 + pos , &len )); )
 	{
 		xpos += glyph_draw( Self, rp, ofont, font_size, glyph, xpos, ypos ) + 2;
 		pos += len;
@@ -235,9 +235,9 @@ void _UTF8_TextUTF8N( struct UTF8IFace *Self,struct RastPort *rp,struct OutlineF
 	ULONG glyph, pos;
 	int len;
 //	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
-	ULONG w = libBase -> IGraphics ->GetBitMapAttr( rp -> BitMap, BMA_ACTUALWIDTH );
+	ULONG w = GetBitMapAttr( rp -> BitMap, BMA_ACTUALWIDTH );
 
-	for ( pos = 0; ((glyph = _UTF8_GetGlyph( UTF8 + pos , &len )) && (n-->0)); )
+	for ( pos = 0; ((glyph = _UTF8_GetGlyph( Self, UTF8 + pos , &len )) && (n-->0)); )
 	{
 		xpos += glyph_draw( Self, rp, ofont, font_size, glyph, xpos, ypos ) + 2;
 		pos += len;
@@ -247,11 +247,11 @@ void _UTF8_TextUTF8N( struct UTF8IFace *Self,struct RastPort *rp,struct OutlineF
 
 void _UTF32_TextUTF32( struct UTF8IFace *Self,struct RastPort *rp,struct OutlineFont *ofont, float font_size, int xpos, int ypos, ULONG *UTF32 )
 {
-	ULONG glyph, pos;
+	ULONG glyph;
 //	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
-	ULONG w = libBase -> IGraphics ->GetBitMapAttr( rp -> BitMap, BMA_ACTUALWIDTH );
+	ULONG w = GetBitMapAttr( rp -> BitMap, BMA_ACTUALWIDTH );
 
-	for ( ; glyph = *UTF32; UTF32++ )
+	for ( ; glyph = *UTF32; UTF32++ )		// it sets glyph, this is correct, ignore the warning.
 	{
 		xpos += glyph_draw( Self, rp, ofont, font_size, glyph, xpos, ypos ) + 2;
 		if (xpos >= w) break;

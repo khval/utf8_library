@@ -66,18 +66,18 @@ BOOL _UTF8_ModInsert(struct UTF8IFace *Self, unsigned char **UTF8, int _start, u
 	unsigned char *temp;
 
 
-	size = _UTF8_GetSize(*UTF8);
-	size_insert = _UTF8_GetSize(UTF8_insert) - 1; // we don't want the extra 0 in the size.
+	size = _UTF8_GetSize(Self, *UTF8);
+	size_insert = _UTF8_GetSize(Self, UTF8_insert) - 1; // we don't want the extra 0 in the size.
 
-	size_before = _UTF8_GetOffsetSize(*UTF8, _start);
+	size_before = _UTF8_GetOffsetSize(Self, *UTF8, _start);
 	if (size_before==-1) return FALSE;
 
 	temp = (unsigned char *) AllocVecTags(size + size_insert, AVT_Type, flags, TAG_END );
 	if (temp)
 	{
-		libBase->IExec->CopyMem( UTF8, temp, size_before );
-		libBase->IExec->CopyMem( UTF8_insert, temp+size_before, size_insert );
-		libBase->IExec->CopyMem( UTF8+size_before, temp+size_before+size_insert, size - size_before );
+		CopyMem( UTF8, temp, size_before );
+		CopyMem( UTF8_insert, temp+size_before, size_insert );
+		CopyMem( UTF8+size_before, temp+size_before+size_insert, size - size_before );
 		temp[ size + size_insert - 1 ] = 0;	
 
 		*UTF8 = temp;

@@ -65,16 +65,16 @@ BOOL _UTF8_ModSubString(struct UTF8IFace *Self,unsigned char **UTF8, int _start,
 	BOOL ret=FALSE;
 	unsigned char *temp;
 
-	pos = _UTF8_GetOffsetSize( *UTF8, _start);
+	pos = _UTF8_GetOffsetSize( Self, *UTF8, _start);
 	if (pos == -1) return FALSE;
 
-	size = _UTF8_GetOffsetSize( *UTF8+pos,_len) ;
+	size = _UTF8_GetOffsetSize( Self, *UTF8+pos,_len) ;
 	if (size == -1) return FALSE;
 
 	temp = (unsigned char *) AllocVecTags( size+1 , AVT_Type, mem_flags, TAG_END );
 	if (temp)
 	{
-		libBase->IExec->CopyMem(*UTF8+pos,temp,size);
+		CopyMem(*UTF8+pos,temp,size);
 		temp[size] = 0;
 		FreeVec( *UTF8 );
 		*UTF8 =temp;
