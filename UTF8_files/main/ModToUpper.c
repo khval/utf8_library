@@ -35,7 +35,7 @@
 *      Encode -- Description
 *
 *   SYNOPSIS
-*     BOOL ModToUpper(unsigned char * UTF8, ULONG *alphabet_UTF8, ULONG mem_flags );
+*     BOOL ModToUpper(ULONG *alphabet_UTF8, unsigned char * UTF8, ULONG mem_flags );
 *
 *   FUNCTION
 *
@@ -60,7 +60,7 @@
 
 
 BOOL _UTF8_ModToUpper(struct UTF8IFace *Self,
-	unsigned char **UTF8, unsigned char *alphabet_UTF8, ULONG mem_flags )
+	unsigned char *alphabet_UTF8,unsigned char **UTF8,  ULONG mem_flags )
 {
 //	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	int alen = _UTF8_Length( Self, alphabet_UTF8 );
