@@ -2,9 +2,11 @@
 #define PROTO_UTF8_H
 
 /*
-**    File made whit idltool.
+**	$Id$
 **
-**    Copyright (c) 2014 Kjetil Hvalstrand
+**	Prototype/inline/pragma header file combo
+**
+**	Copyright (c) 2010 Hyperion Entertainment CVBA.
 **	All Rights Reserved.
 */
 
@@ -18,11 +20,11 @@
 /****************************************************************************/
 
 #ifndef __NOLIBBASE__
- #ifndef __USE_BASETYPE__
-  extern struct Library * UTF8Base;
+ #if defined(__cplusplus) && defined(__USE_AMIGAOS_NAMESPACE__)
+  extern struct AmigaOS::Library * UTF8Base;
  #else
   extern struct Library * UTF8Base;
- #endif /* __USE_BASETYPE__ */
+ #endif
 #endif /* __NOLIBBASE__ */
 
 /****************************************************************************/
@@ -36,7 +38,11 @@
   #define CLIB_UTF8_PROTOS_H 1
  #endif /* CLIB_UTF8_PROTOS_H */
  #ifndef __NOGLOBALIFACE__
-  extern struct UTF8IFace *IUTF8;
+  #if defined(__cplusplus) && defined(__USE_AMIGAOS_NAMESPACE__)
+   extern struct AmigaOS::UTF8IFace * IUTF8;
+  #else
+   extern struct UTF8IFace * IUTF8;
+  #endif
  #endif /* __NOGLOBALIFACE__ */
 #else /* __amigaos4__ */
  #ifndef CLIB_UTF8_PROTOS_H
@@ -45,14 +51,14 @@
  #if defined(__GNUC__)
   #ifndef __PPC__
    #include <inline/UTF8.h>
-  #else
+  #else /* __PPC__ */
    #include <ppcinline/UTF8.h>
   #endif /* __PPC__ */
  #elif defined(__VBCC__)
   #ifndef __PPC__
    #include <inline/UTF8_protos.h>
   #endif /* __PPC__ */
- #else
+ #else /* __GNUC__ */
   #include <pragmas/UTF8_pragmas.h>
  #endif /* __GNUC__ */
 #endif /* __amigaos4__ */

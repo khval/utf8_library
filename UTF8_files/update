@@ -1,0 +1,32 @@
+cd > env:olddir
+
+IF NOT EXISTS ram:temp
+makedir ram:temp
+endif
+
+copy /UTF8.xml ram:temp
+
+cd ram:temp
+
+idltool -a UTF8.xml
+
+cd > env:thisdir
+echo $thisdir
+
+if exists UTF8_files
+cd UTF8_files/
+; replace default text set by IDLTOOL
+rpl.exe -R "Hyperion Entertainment CVBA" "LiveForIt Software" >NIL:
+rpl.exe -R "All Rights Reserved" "License: LGPL" >NIL:
+endif 
+
+cd $olddir
+copy ram:temp/include/#? /include/  all
+ copy ram:temp/UTF8_vectors.c /
+ copy ram:temp/UTF8_vectors.h /
+ copy ram:temp/UTF8_files/UTF8_vectors.c ""
+ copy ram:temp/UTF8_files/UTF8_vectors.h ""
+; xcopy ram:temp/UTF8_files/main main NOREP ALL QUIET
+
+; delete QUIET ram:temp all 
+

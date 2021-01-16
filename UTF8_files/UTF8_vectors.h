@@ -30,7 +30,7 @@ extern char *			_UTF8_DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, uns
 extern unsigned char *	_UTF8_Encode(struct UTF8IFace *Self, ULONG *codeset_page, char * ascii, ULONG mem_flags);
 extern int				_UTF8_EstimateByteSize(struct UTF8IFace *, ULONG glyph);
 
-extern ULONG			_UTF8_FindGlyph( struct UTF8IFace *, unsigned char *UTF8_alphabet, ULONG value_one );
+extern ULONG			_UTF8_FindGlyph( struct UTF8IFace *, unsigned char *UTF8_alphabet, ULONG glyph );
 
 extern ULONG			_UTF8_GetGlyph(struct UTF8IFace *, unsigned char *data, int *len);
 extern ULONG			_UTF8_GetGlyphAt(struct UTF8IFace *, unsigned char *data, int pos, int *len);
@@ -62,6 +62,7 @@ extern void _UTF8_TextUTF8Extent( struct UTF8IFace *Self,struct OutlineFont *ofo
 extern void _UTF8_TextUTF8ExtentN( struct UTF8IFace *Self,struct OutlineFont *ofont, float font_size, unsigned char *UTF8, int n, struct TextExtent *ext );
 extern int _UTF8_TextUTF8Length( struct UTF8IFace *Self,struct OutlineFont *ofont, float font_size, unsigned char *UTF8 );
 extern int _UTF8_TextUTF8LengthN( struct UTF8IFace *Self,struct OutlineFont *ofont, float font_size, unsigned char *UTF8, int n );
+
 extern void _UTF8_TextUTF8( struct UTF8IFace *Self,struct RastPort *rp,struct OutlineFont *ofont, float font_size, int xpos, int ypos, unsigned char *UTF8 );
 extern void _UTF8_TextUTF8N( struct UTF8IFace *Self,struct RastPort *rp,struct OutlineFont *ofont, float font_size, int xpos, int ypos, unsigned char *UTF8, int n );
 extern void _UTF32_TextUTF32( struct UTF8IFace *Self,struct RastPort *rp,struct OutlineFont *ofont, float font_size, int xpos, int ypos, ULONG *UTF32 );

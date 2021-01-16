@@ -56,7 +56,7 @@ $(TARGET): $(OBJS)
 clean:
 	$(RM) $(TARGET) $(OBJS)
 
-init.o: init.c libbase.h UTF8.library_rev.h UTF8_vectors.c include/interfaces/UTF8.h
+init.o: init.c libbase.h UTF8.library_rev.h UTF8_vectors.c ../include/interfaces/UTF8.h
 	gcc  -Wall -O3  -Iinclude    -c -o init.o init.c
 
 
