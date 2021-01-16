@@ -5,7 +5,7 @@ This library is for AmigaOS4.1 FE
 It can be rewritten for AROS, MorphOS, older AmigaOS 3.x,
 
 I’m rewetting some parts to make it more portable, 
-I don’t wont waste time on ports to other operating systems,
+but I don’t wont waste time on ports to other operating systems,
 so if anyone is interested the list mile you need to take.
 
 The aim of this library is to provide similar features to standard functions in graphic library,
