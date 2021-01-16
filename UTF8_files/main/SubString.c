@@ -72,7 +72,7 @@ unsigned char * _UTF8_SubString(struct UTF8IFace *Self,
 	size = _UTF8_GetOffsetSize( Self, UTF8+pos,_len) ;
 	if (size == -1) return NULL;
 
-	ret = (unsigned char *) AllocVecTags( size+1 , AVT_Type, mem_flags, TAG_END);
+	ret = (unsigned char *) sys_alloc( size+1, mem_flags);
 	if (ret)
 	{
 		CopyMem(UTF8+pos,ret,size);

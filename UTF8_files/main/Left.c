@@ -80,7 +80,7 @@ unsigned char * _UTF8_Left(struct UTF8IFace *Self,
 		if (value == 0) return NULL;
 	}
 
-	ret = (unsigned char *) AllocVec( size+1 ,MEMF_CLEAR);
+	ret = (unsigned char *) sys_alloc_clear( size+1, flags );
 	CopyMem( UTF8, ret, size);
 
 	return ret;

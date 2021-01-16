@@ -72,7 +72,7 @@ BOOL _UTF8_ModLeft(struct UTF8IFace *Self,	unsigned char **UTF8, int _len, ULONG
 	size = _UTF8_GetOffsetSize( Self, *UTF8,_len) ;
 	if (size == -1) return FALSE;
 
-	temp = (unsigned char *) AllocVecTags( size+1 ,AVT_Type, flags, TAG_END );
+	temp = (unsigned char *) sys_alloc( size+1 , flags );
 	if (temp)
 	{
 		CopyMem( *UTF8, temp, size);

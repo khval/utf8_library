@@ -100,7 +100,7 @@ BOOL _UTF8_ModToLower(struct UTF8IFace *Self, unsigned char *alphabet_UTF8, unsi
 		size += len;
 	}
 
-	new_utf8 = (unsigned char *) AllocVecTags(size+100, AVT_Type, mem_flags, TAG_END);
+	new_utf8 = (unsigned char *) sys_alloc(size+100, mem_flags );
 	if (new_utf8)
 	{
 		pos = 0;

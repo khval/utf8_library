@@ -60,14 +60,13 @@
 
 unsigned char * _UTF8_Copy(struct UTF8IFace *Self,unsigned char *UTF8, ULONG mem_flags )
 {
-//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	int size;
 	unsigned char *ret;
 
 	size = _UTF8_GetSize( Self, UTF8 ) ;
 	if (size == -1) return NULL;
 
-	ret = (unsigned char *) AllocVecTags( size ,AVT_Type,  mem_flags, TAG_END );
+	ret = (unsigned char *) sys_alloc( size ,  mem_flags );
 	if (ret)
 	{
 		CopyMem(UTF8,ret,size);

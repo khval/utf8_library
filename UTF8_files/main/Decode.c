@@ -69,14 +69,11 @@ char * _UTF8_Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char *
 
 	if (!UTF8) return NULL;
 
-	size =  _UTF8_Length( Self, UTF8 ) + 1;
+	size =  _UTF8_GetSize( Self, UTF8 );
 
 	DebugPrintF(" _UTF8_Decode UTF8 string len = %d \n", size);  
 
-	new_str =  AllocVecTags(size+100, 
-					AVT_Type, flags,
-					AVT_ClearWithValue, TRUE, 
-					TAG_END );
+	new_str =  sys_alloc_clear(size, flags);
 	if (new_str)
 	{
 		c = new_str;
@@ -124,13 +121,11 @@ char * _UTF8_DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned cha
 
 	if (!UTF8) return NULL;
 
-	size =  _UTF8_Length( Self, UTF8 ) + 1;
+	size =  _UTF8_GetSize( Self, UTF8 ) ;
 
-	DebugPrintF(" _UTF8_Decode UTF8 string len = %d \n", size);  
+	DebugPrintF(" _UTF8_Decode UTF8 string size = %d \n", size);  
 
-	// we don't know the exact size, we need assume worst case, due bit loss we can expect 5 bytes. and \0 byte
-
-	new_str =  AllocVecTags(size*5+1, 	AVT_Type, flags, TAG_END );	
+	new_str =  sys_alloc(size,flags);	
 
 	if (new_str)
 	{

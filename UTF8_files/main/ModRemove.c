@@ -75,7 +75,7 @@ BOOL _UTF8_ModRemove(struct UTF8IFace *Self,	unsigned char **UTF8, int _start, i
 
 	// we most be care full not remove \0 from string, need one extra byte.
 
-	temp = (unsigned char *) AllocVecTags(size - size_to_remove + 1, AVT_Type, flags, TAG_END );
+	temp = (unsigned char *) sys_alloc(size - size_to_remove + 1, flags );
 	if (temp)
 	{
 		CopyMem(*UTF8,temp,size_before);

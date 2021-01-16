@@ -78,7 +78,7 @@ unsigned char *_UTF8_Trim(struct UTF8IFace *Self, unsigned char *UTF8, ULONG mem
 	}
 	_len =_end-_start+1;
 
-	temp = (unsigned char *) AllocVec( _len + 1, MEMF_CLEAR | mem_flags );
+	temp = (unsigned char *) sys_alloc_clear( _len + 1,  mem_flags );
 	if (temp)
 	{
 		CopyMem( UTF8+_start, temp, _len );

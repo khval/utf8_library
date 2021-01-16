@@ -18,6 +18,7 @@
     USA
 */
 
+#include <stdlib.h>
 
 #include <exec/exec.h>
 #include <proto/exec.h>
@@ -74,8 +75,14 @@ BOOL _UTF8_ModToUpper(struct UTF8IFace *Self,
 	unsigned char *new_utf8;
 	ULONG glyph;
 
-	ULONG *temp = (ULONG *) AllocVec( sizeof( ULONG ) * tlen, MEMF_CLEAR );
-	if (!temp) return FALSE;
+	// we don't really know the size of new string.
+	// because string is dynamic, so need to use UTF32.
+
+	// its alloced as stack, so don't need to free it, 
+	// it should also be faster.
+
+	ULONG *tempUTF32 = (ULONG *) alloca( sizeof(ULONG) * (tlen + 1) );
+	if (!tempUTF32) return FALSE;
 
 	for (n=0;n<tlen;n++)
 	{
@@ -90,33 +97,31 @@ BOOL _UTF8_ModToUpper(struct UTF8IFace *Self,
 			}
 		}
 
-		temp[n] = glyph;
+		tempUTF32[n] = glyph;
 	}
 
 	size = 1;
 	for (n=0;n<tlen;n++)
 	{
-		len = _UTF8_EstimateByteSize( Self, temp[n] );
+		len = _UTF8_EstimateByteSize( Self, tempUTF32[n] );
 		size += len;
 	}
 
-	new_utf8 = (unsigned char *) AllocVecTags(size+100, AVT_Type, mem_flags, TAG_END );
+	new_utf8 = (unsigned char *) sys_alloc(size, mem_flags );
 	if (new_utf8)
 	{
 		pos = 0;
 		for (n=0;n<tlen;n++)
 		{
-			pos += _UTF8_SetGlyph( Self, temp[n], new_utf8 + pos );
+			pos += _UTF8_SetGlyph( Self, tempUTF32[n], new_utf8 + pos );
 		}
 		new_utf8[pos] = 0;
 
-		FreeVec(temp);
 		FreeVec(*UTF8);
 		*UTF8 = new_utf8;
 	}
 	else
 	{
-		FreeVec(temp);
 		return FALSE;
 	}
 

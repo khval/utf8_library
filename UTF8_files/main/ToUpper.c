@@ -18,6 +18,8 @@
     USA
 */
 
+#include <stdlib.h>
+
 #include <exec/exec.h>
 #include <proto/exec.h>
 #include <dos/dos.h>
@@ -72,8 +74,8 @@ unsigned char * _UTF8_ToUpper(struct UTF8IFace *Self, unsigned char *alphabet_UT
 	unsigned char *new_utf8;
 	ULONG glyph;
 
-	ULONG *temp = (ULONG *) AllocVecTags( 5 * tlen + 1,  AVT_Type, mem_flags, TAG_END );
-	if (!temp) return FALSE;
+	ULONG *tempUTF32 = (ULONG *) alloca( sizeof(ULONG) * (tlen + 1) );
+	if (!tempUTF32) return FALSE;
 
 	for (n=0;n<tlen;n++)
 	{
@@ -88,31 +90,28 @@ unsigned char * _UTF8_ToUpper(struct UTF8IFace *Self, unsigned char *alphabet_UT
 			}
 		}
 
-		temp[n] = glyph;
+		tempUTF32[n] = glyph;
 	}
 
 	size = 1;
 	for (n=0;n<tlen;n++)
 	{
-		len = _UTF8_EstimateByteSize( Self, temp[n] );
+		len = _UTF8_EstimateByteSize( Self, tempUTF32[n] );
 		size += len;
 	}
 
-	new_utf8 = (unsigned char *) AllocVecTags(size+100,  AVT_Type, mem_flags, TAG_END );
+	new_utf8 = (unsigned char *) sys_alloc(size+100, mem_flags );
 	if (new_utf8)
 	{
 		pos = 0;
 		for (n=0;n<tlen;n++)
 		{
-			pos += _UTF8_SetGlyph( Self, temp[n], new_utf8 + pos );
+			pos += _UTF8_SetGlyph( Self, tempUTF32[n], new_utf8 + pos );
 		}
 		new_utf8[pos] = 0;
-
-		FreeVec(temp);
 	}
 	else
 	{
-		FreeVec(temp);
 		return NULL;
 	}
 

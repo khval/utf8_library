@@ -60,8 +60,6 @@
 
 unsigned char * _UTF8_Encode(struct UTF8IFace *Self, ULONG *codeset_page, char * ascii, ULONG mem_flags)
 {
-////	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
-
 	unsigned char *c;
 	unsigned char *utf8 = NULL;
 	int size,pos;
@@ -73,7 +71,7 @@ unsigned char * _UTF8_Encode(struct UTF8IFace *Self, ULONG *codeset_page, char *
 		for (c = (unsigned char *) ascii; *c ; c++ )
 			size += _UTF8_EstimateByteSize( Self, *c );
 
-		utf8 = AllocVecTags(size+2, AVT_Type, mem_flags, TAG_END );
+		utf8 = sys_alloc(size+1,  mem_flags );
 		if (utf8)
 		{
 			pos = 0;
@@ -88,7 +86,7 @@ unsigned char * _UTF8_Encode(struct UTF8IFace *Self, ULONG *codeset_page, char *
 		for (c = (unsigned char *) ascii; *c ; c++ )
 			size += _UTF8_EstimateByteSize( Self, codeset_page[  *c ] );
 
-		utf8 = AllocVecTags(size+2, AVT_Type, mem_flags, TAG_END );
+		utf8 = sys_alloc(size+1, mem_flags );
 		if (utf8)
 		{
 			pos = 0;

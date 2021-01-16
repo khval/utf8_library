@@ -74,7 +74,7 @@ unsigned char * _UTF8_Remove(struct UTF8IFace *Self,
 	size_to_remove = _UTF8_GetOffsetSize( Self, UTF8 + size_before, _len);
 	if (size_to_remove==-1) return NULL;
 
-	temp = (unsigned char *) AllocVec(size - size_to_remove, MEMF_CLEAR | flags);
+	temp = (unsigned char *) sys_alloc_clear(size - size_to_remove, MEMF_CLEAR | flags);
 	if (temp)
 	{
 		CopyMem(UTF8,temp,size_before);

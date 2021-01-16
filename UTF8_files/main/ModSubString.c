@@ -71,7 +71,7 @@ BOOL _UTF8_ModSubString(struct UTF8IFace *Self,unsigned char **UTF8, int _start,
 	size = _UTF8_GetOffsetSize( Self, *UTF8+pos,_len) ;
 	if (size == -1) return FALSE;
 
-	temp = (unsigned char *) AllocVecTags( size+1 , AVT_Type, mem_flags, TAG_END );
+	temp = (unsigned char *) sys_alloc( size+1, mem_flags );
 	if (temp)
 	{
 		CopyMem(*UTF8+pos,temp,size);

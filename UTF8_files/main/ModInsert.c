@@ -72,7 +72,7 @@ BOOL _UTF8_ModInsert(struct UTF8IFace *Self, unsigned char **UTF8, int _start, u
 	size_before = _UTF8_GetOffsetSize(Self, *UTF8, _start);
 	if (size_before==-1) return FALSE;
 
-	temp = (unsigned char *) AllocVecTags(size + size_insert, AVT_Type, flags, TAG_END );
+	temp = (unsigned char *) sys_alloc(size + size_insert, flags );
 	if (temp)
 	{
 		CopyMem( UTF8, temp, size_before );

@@ -70,7 +70,7 @@ unsigned char * _UTF8_Insert(struct UTF8IFace *Self,
 	size_before = _UTF8_GetOffsetSize( Self, UTF8, _start);
 	if (size_before==-1) return NULL;
 
-	temp = (unsigned char *) AllocVec(size + size_insert, MEMF_CLEAR | flags);
+	temp = (unsigned char *) sys_alloc_clear(size + size_insert, flags);
 
 	CopyMem( UTF8, temp, size_before );
 	CopyMem( UTF8_insert, temp+size_before, size_insert );
