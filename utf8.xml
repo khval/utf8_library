@@ -8,27 +8,247 @@
 		<method name="Release" result="ULONG"/>
 		<method name="Expunge" result="void" status="unimplemented"/>
 		<method name="Clone" result="struct Interface *" status="unimplemented"/>
+
+		<method name="CaseCmp" result="int">
+			<arg name="UTF8_alphabet" type="unsigned char *"/>
+			<arg name="UTF8_one" type="unsigned char *"/>
+			<arg name="UTF8_two" type="unsigned char *"/>
+		</method>
+
+		<method name="Cmp" result="int">
+			<arg name="UTF8_alphabet" type="unsigned char *"/>
+			<arg name="UTF8_one" type="unsigned char *"/>
+			<arg name="UTF8_two" type="unsigned char *"/>
+		</method>
+
 		<method name="Decode" result="unsigned char *">
+			<arg name="codeset_page" type="ULONG"/>
 			<arg name="UTF8" type="unsigned char *"/>
-			<arg name="codeset_page" type="ULONG"/>
+			<arg name="flags" type="ULONG"/>
 		</method>
+
+		<method name="DecodeLen" result="unsigned char *">
+			<arg name="codeset_page" type="ULONG"/>
+			<arg name="UTF8" type="unsigned char *"/>
+			<arg name="len" type="ULONG"/>
+			<arg name="flags" type="ULONG"/>
+		</method>
+
 		<method name="Encode" result="unsigned char *">
-			<arg name="ascii" type="char *"/>
 			<arg name="codeset_page" type="ULONG"/>
+			<arg name="ascii" type="char *"/>
+			<arg name="flags" type="ULONG"/>
 		</method>
+
 		<method name="EstimateByteSize" result="int">
 			<arg name="glyph" type="ULONG"/>
 		</method>
+
+		<method name="FindGlyph" result="ULONG">
+			<arg name="UTF8_alphabet" type="unsigned char *"/>
+			<arg name="glyph" type="ULONG"/>
+		</method>
+
 		<method name="GetGlyph" result="ULONG">
 			<arg name="data" type="unsigned char"/>
 			<arg name="len" type="int *"/>
 		</method>
-		<method name="SetGlyph" result="int">
+
+		<method name="GetGlyphAt" result="ULONG">
+			<arg name="data" type="unsigned char"/>
+			<arg name="pos" type="int"/>
+			<arg name="len" type="int *"/>
+		</method>
+
+		<method name="GetOffsetSize" result="">
+			<arg name="UTF8" type="unsigned char *"/>
+			<arg name="to_pos" type="int"/>
+		</method>
+
+		<method name="GetSize" result="">
+			<arg name="UTF8" type="unsigned char *"/>
+		</method>
+
+		<method name="IndexOf" result="int">
+			<arg name="UTF8" type="unsigned char *"/>
+			<arg name="find" type="unsigned char *"/>
+		</method>
+
+		<method name="Insert" result="unsigned char *">
+			<arg name="UTF8" type="unsigned char **"/>
+			<arg name="start" type="int"/>
+			<arg name="UTF8_insert" type="unsigned char **"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="Left" result="unsigned char *">
+			<arg name="UTF8" type="unsigned char *"/>
+			<arg name="len" type="int"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="Length" result="">
+			<arg name="UTF8" type="unsigned char *"/>
+		</method>
+
+		<method name="Merge" result="unsigned char * VARARGS68K ">
+			<arg name="mem_flags" type="ULONG"/>
+			<arg name="..." type=""/>
+		</method>
+
+		<method name="ModInsert" result="BOOL">
+			<arg name="UTF8" type="unsigned char **"/>
+			<arg name="start" type="int"/>
+			<arg name="UTF8_insert" type="unsigned char **"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="ModLeft" result="BOOL">
+			<arg name="UTF8" type="unsigned char **"/>
+			<arg name="len" type="int"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="ModRemove" result="BOOL">
+			<arg name="UTF8" type="unsigned char **"/>
+			<arg name="start" type="int"/>
+			<arg name="len" type="int"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="ModRight" result="BOOL">
+			<arg name="UTF8" type="unsigned char **"/>
+			<arg name="len" type="int"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="ModSubString" result="BOOL">
+			<arg name="UTF8" type="unsigned char **"/>
+			<arg name="start" type="int"/>
+			<arg name="len" type="int"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="ModToLower" result="BOOL">
+			<arg name="alphabet_UTF8" type="unsigned char *"/>
+			<arg name="UTF8" type="unsigned char **"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="ModToUpper" result="BOOL">
+			<arg name="alphabet_UTF8" type="unsigned char *"/>
+			<arg name="UTF8" type="unsigned char **"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="ModTrim" result="BOOL">
+			<arg name="UTF8" type="unsigned char **"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="Printf" result="void">
+			<arg name="codeset_page" type="ULONG *"/>
+			<arg name="utf8_fmt" type="unsigned char *"/>
+			<arg name="..." type=""/>
+		</method>
+
+		<method name="Remove" result="unsigned char *">
+			<arg name="UTF8" type="unsigned int *"/>
+			<arg name="start" type="int"/>
+			<arg name="len" type="int"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="Right" result="unsigned char *">
+			<arg name="UTF8" type="unsigned int *"/>
+			<arg name="len" type="int"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="SetGlyph" result="ULONG">
 			<arg name="glyph" type="ULONG"/>
 			<arg name="data" type="unsigned char *"/>
 		</method>
-		<method name="Length" result="int">
-			<arg name="UTF8" type="unsigned char *"/>
+
+		<method name="SubString" result="">
+			<arg name="UTF8" type="unsigned int *"/>
+			<arg name="start" type="int"/>
+			<arg name="len" type="int"/>
+			<arg name="mem_flags" type="ULONG"/>
 		</method>
+
+		<method name="ToLower" result="">
+			<arg name="alphabet_UTF8" type="unsigned char *"/>
+			<arg name="UTF8" type="unsigned int *"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="ToUpper" result="">
+			<arg name="alphabet_UTF8" type="unsigned char *"/>
+			<arg name="UTF8" type="unsigned int *"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="Trim" result="">
+			<arg name="UTF8" type="unsigned char *"/>
+			<arg name="mem_flags" type="ULONG"/>
+		</method>
+
+		<method name="TextUTF8Extent" result="void">
+			<arg name="ofont" type="struct OutlineFont *"/>
+			<arg name="font_size" type="float"/>
+			<arg name="UTF8" type="unsigned int *"/>
+			<arg name="ext" type="struct TextExtent *"/>
+		</method>
+
+		<method name="TextUTF8ExtentN" result="void">
+			<arg name="ofont" type="struct OutlineFont *"/>
+			<arg name="font_size" type="float"/>
+			<arg name="UTF8" type="unsigned int *"/>
+			<arg name="n" type="int"/>
+			<arg name="ext" type="struct TextExtent *"/>
+		</method>
+
+		<method name="TextUTF8Length" result="int">
+			<arg name="ofont" type="struct OutlineFont *"/>
+			<arg name="font_size" type="float"/>
+			<arg name="UTF8" type="unsigned int *"/>
+		</method>
+
+		<method name="TextUTF8LengthN" result="int">
+			<arg name="ofont" type="struct OutlineFont *"/>
+			<arg name="font_size" type="float"/>
+			<arg name="UTF8" type="unsigned int *"/>
+			<arg name="n" type="int"/>
+		</method>
+
+		<method name="TextUTF8" result="void">
+			<arg name="rp" type="struct RastPort *"/>
+			<arg name="ofont" type="struct OutlineFont *"/>
+			<arg name="font_size" type="float"/>
+			<arg name="xpos" type="int"/>
+			<arg name="ypos" type="int"/>
+			<arg name="UTF8" type="unsigned int *"/>
+		</method>
+
+		<method name="TextUTF8N" result="void">
+			<arg name="rp" type="struct RastPort *"/>
+			<arg name="ofont" type="struct OutlineFont *"/>
+			<arg name="font_size" type="float"/>
+			<arg name="xpos" type="int"/>
+			<arg name="ypos" type="int"/>
+			<arg name="UTF8" type="unsigned int *"/>
+			<arg name="n" type="int"/>
+		</method>
+
+		<method name="TextUTF32" result="void">
+			<arg name="rp" type="struct RastPort *"/>
+			<arg name="ofont" type="struct OutlineFont *"/>
+			<arg name="font_size" type="float"/>
+			<arg name="xpos" type="int"/>
+			<arg name="ypos" type="int"/>
+			<arg name="UTF32" type="ULONG *"/>
+		</method>
+
 	</interface>
 </library>
