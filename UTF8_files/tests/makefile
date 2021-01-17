@@ -1,7 +1,7 @@
 
 VER=-DVER=6
 
-files =	save_utf8_c.exe save_utf8_C++.exe \
+files =	save_utf8_c.exe  \
 		utf8_test_C.exe utf8_upper_lower_test_C.exe \
 		utf8_substring_test_C.exe utf8_indexof_test_C.exe \
 		utf8_printf_test_C.exe utf8_left_right_test_C.exe \
@@ -9,6 +9,8 @@ files =	save_utf8_c.exe save_utf8_C++.exe \
 		utf8_insert_test_C.exe utf8_remove_test_C.exe \
 		utf8_inline_test_C.exe utf8_inline_modify_test_C.exe \
 		utf8_cmp_test_C.exe
+
+cpp_files = save_utf8_C++.exe
 
 all:		$(files)
 

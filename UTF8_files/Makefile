@@ -33,14 +33,15 @@ LIBS =
 VERSION = 53
 
 # "main" Interface Source Files
-main_SRCS = main/Obtain.c main/Release.c main/Decode.c main/Encode.c \
-	main/EstimateByteSize.c main/GetGlyph.c main/GetGlyphAt.c main/SetGlyph.c main/Length.c \
-	main/ToLower.c main/ToUpper.c main/SubString.c main/IndexOf.c main/GetSize.c main/Printf.c \
-	main/Merge.c main/Left.c main/Right.c main/GetOffsetSize.c main/insert.c main/Trim.c \
-	main/remove.c main/ModToUpper.c main/ModToLower.c \
-	main/ModLeft.c main/ModRight.c main/ModTrim.c main/ModSubString.c \
-	main/ModRemove.c main/ModInsert.c main/Copy.c main/cmp.c main/casecmp.c main/FindGlyph.c \
-	main/graphics.c
+main_SRCS = main/Obtain.c main/Release.c \
+	main/UTF8Decode.c main/UTF8Encode.c \
+	main/UTF8EstimateByteSize.c main/UTF8GetGlyph.c main/UTF8GetGlyphAt.c main/UTF8SetGlyph.c main/UTF8Length.c \
+	main/UTF8ToLower.c main/UTF8ToUpper.c main/UTF8SubString.c main/UTF8IndexOf.c main/UTF8GetSize.c main/UTF8Printf.c \
+	main/UTF8Merge.c main/UTF8Left.c main/UTF8Right.c main/UTF8GetOffsetSize.c main/UTF8Insert.c main/UTF8Trim.c \
+	main/UTF8remove.c main/UTF8ModToUpper.c main/UTF8ModToLower.c \
+	main/UTF8ModLeft.c main/UTF8ModRight.c main/UTF8ModTrim.c main/UTF8ModSubString.c \
+	main/UTF8ModRemove.c main/UTF8ModInsert.c main/UTF8Copy.c main/UTF8cmp.c main/UTF8casecmp.c main/UTF8FindGlyph.c \
+	main/UTF8graphics.c
 
 # -------------------------------------------------------------
 # Nothing should need changing below this line
