@@ -3,35 +3,31 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define __USE_INLINE__
+#ifdef __amigaos4__
+#include "common4aos4.h"
+#endif
+
+#ifdef __amigaos3__
+#include "common4aos3.h"
+#endif
 
 #include <stdio.h>
 #include <string.h>
+
 #include <proto/exec.h>
 #include <proto/locale.h>
 #include <proto/diskfont.h>
 #include <diskfont/diskfonttag.h>
-
 #include <proto/utf8.h>
-
-#undef Length
 
 struct Locale *locale;
 uint32 codeset;
-
-#define DefineLib( a ) struct Library * a ## _base; struct a ## IFace *I ## a;
-
-#define CloseLIB( name ) \
-	if ( I##name) DropInterface( (struct Interface *) I##name ); \
-	if ( name  ## _base) CloseLibrary( name ## _base); \
-
 
 DefineLib( UTF8 );
 DefineLib( Locale );
 DefineLib( Diskfont );
 
 ULONG *CHAR_CODES;
-
 
 int ami_main(int nargs,char **args);
 
@@ -41,15 +37,21 @@ int main(int nargs,char **args)
 	unsigned char n;
 
 	Locale_base = OpenLibrary("locale.library", 53);
-	if (Locale_base) ILocale = (struct LocaleIFace *)  GetInterface( Locale_base, "main", 1, TAG_END );
-
 	Diskfont_base = OpenLibrary("diskfont.library", 53);
-	if (Diskfont_base) IDiskfont = (struct DiskfontIFace *)  GetInterface( Diskfont_base, "main", 1, TAG_END );
-
 	UTF8_base = OpenLibrary("UTF8.library", VER);
+
+#ifdef __amigaos4__
+
+	if (Locale_base) ILocale = (struct LocaleIFace *)  GetInterface( Locale_base, "main", 1, TAG_END );
+	if (Diskfont_base) IDiskfont = (struct DiskfontIFace *)  GetInterface( Diskfont_base, "main", 1, TAG_END );
 	if (UTF8_base) IUTF8 = (struct UTF8IFace *)  GetInterface( UTF8_base, "main", 1, TAG_END );
 
-	if ((ILocale)&&(IDiskfont)&&(IUTF8))
+#endif
+
+	if (
+		libIsOpen(Locale) &&
+		libIsOpen(Diskfont) &&
+		libIsOpen(UTF8))
 	{
 		locale = OpenLocale(NULL);
 		CHAR_CODES = (ULONG *) ObtainCharsetInfo(DFCS_NUMBER, (ULONG) locale -> loc_CodeSet , DFCS_MAPTABLE);
@@ -58,9 +60,9 @@ int main(int nargs,char **args)
 	}
 	else
 	{
-		if (!ILocale)	printf("Failed to open %s v %d\n",  "locale.library", 53 );
-		if (!IDiskfont)	printf("Failed to open %s v %d\n",  "diskfont.library", 53 );
-		if (!IUTF8)		printf("Failed to open %s v %d\n",  "UF8.library", VER );
+		if (!libIsOpen(Locale))	printf("Failed to open %s v %d\n",  "locale.library", 53 );
+		if (!libIsOpen(Diskfont))	printf("Failed to open %s v %d\n",  "diskfont.library", 53 );
+		if (!libIsOpen(UTF8))		printf("Failed to open %s v %d\n",  "UF8.library", VER );
 	}
 
 	CloseLIB( Diskfont );
