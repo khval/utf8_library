@@ -1,9 +1,12 @@
 
 ; SDK
-copy include SDK:include/include_h all
+copy /include SDK:include/include_h all
 
 ; Autodocs
 copy Autodocs sdk:Documentation/AutoDocs all
+
+; Need to unload it from memory....
+avail flush
 
 ; LIBS
 copy UTF8.library Libs:
