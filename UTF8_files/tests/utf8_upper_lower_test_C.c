@@ -3,6 +3,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#define __USE_INLINE__
+
 #include <stdio.h>
 #include <string.h>
 #include <proto/exec.h>
@@ -21,16 +23,16 @@ uint32 codeset;
 
 void open_lib( const char *name, int ver , const char *iname, int iver, struct Library **base, struct Interface **interface)
 {
-	*base = IExec -> OpenLibrary( name , ver);
-	if (*base) *interface = IExec -> GetInterface( *base,  iname , iver, TAG_END );
+	*base = OpenLibrary( name , ver);
+	if (*base) *interface = GetInterface( *base,  iname , iver, TAG_END );
 }
 
 #define OpenLib( a, ver, iname, iver ) \
 	open_lib( #a ".Library",  ver ,  iname, iver, & a ## _base  , (struct a ## IFace *) &I ## a )
 
 #define CloseLIB( name ) \
-	if ( I##name) IExec -> DropInterface( (struct Interface *) I##name ); \
-	if ( name  ## _base) IExec -> CloseLibrary( name ## _base); \
+	if ( I##name) DropInterface( (struct Interface *) I##name ); \
+	if ( name  ## _base) CloseLibrary( name ## _base); \
 
 
 DefineLib( UTF8 );
@@ -51,10 +53,10 @@ int main(int nargs,char **args)
 
 	if ((ILocale)&&(IDiskfont)&&(IUTF8))
 	{
-		locale = ILocale->OpenLocale(NULL);
-		CHAR_CODES = (ULONG *) IDiskfont -> ObtainCharsetInfo(DFCS_NUMBER, (ULONG) locale -> loc_CodeSet , DFCS_MAPTABLE);
+		locale = OpenLocale(NULL);
+		CHAR_CODES = (ULONG *) ObtainCharsetInfo(DFCS_NUMBER, (ULONG) locale -> loc_CodeSet , DFCS_MAPTABLE);
 		ret = ami_main(nargs,args);
-		ILocale->CloseLocale(locale);
+		CloseLocale(locale);
 	}
 	else
 	{
@@ -84,33 +86,33 @@ int ami_main(int nargs,char **args)
 	char *txt;
 
 	// Just a test string in Norwegian ISO-8859-15
-	UTF8 = IUTF8 -> Encode( CHAR_CODES ,  (char *) "Hello World æøå", MEMF_PRIVATE ); 
+	UTF8 = UTF8Encode( CHAR_CODES ,  (char *) "Hello World æøå", MEMF_PRIVATE ); 
 
 	// load it from a text in UTF8 format its better, if you have the wrong ISO you see wrong symbols.
-	ALPHABET_UTF8 =  IUTF8 -> Encode( CHAR_CODES , (char *) "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ", MEMF_PRIVATE ); 
+	ALPHABET_UTF8 =  UTF8Encode( CHAR_CODES , (char *) "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ", MEMF_PRIVATE ); 
 
-	if (IUTF8 -> ModToUpper( ALPHABET_UTF8, &UTF8, MEMF_PRIVATE ))
+	if (UTF8ModToUpper( ALPHABET_UTF8, &UTF8, MEMF_PRIVATE ))
 	{
-		txt = IUTF8 -> Decode( CHAR_CODES, UTF8, MEMF_PRIVATE );
+		txt = UTF8Decode( CHAR_CODES, UTF8, MEMF_PRIVATE );
 		if (txt)
 		{
 			printf("%s\n", txt);
-			IExec -> FreeVec(txt);
+			FreeVec(txt);
 		}
 	}
 
-	if (IUTF8 -> ModToLower( ALPHABET_UTF8, &UTF8,  MEMF_PRIVATE ))
+	if (UTF8ModToLower( ALPHABET_UTF8, &UTF8,  MEMF_PRIVATE ))
 	{
 		//  To display the UTF8 string we Decode it, Note: we can also  use IUTF8->PrintF() to do the same thing easier.
-		txt = IUTF8 -> Decode( CHAR_CODES, UTF8,  MEMF_PRIVATE );
+		txt = UTF8Decode( CHAR_CODES, UTF8,  MEMF_PRIVATE );
 		if (txt)
 		{
 			printf("%s\n", txt);
-			IExec -> FreeVec(txt);
+			FreeVec(txt);
 		}
 	}
 
-	if (ALPHABET_UTF8) IExec->FreeVec(ALPHABET_UTF8);
-	if (UTF8) IExec->FreeVec(UTF8);
+	if (ALPHABET_UTF8) FreeVec(ALPHABET_UTF8);
+	if (UTF8) FreeVec(UTF8);
 }
 
