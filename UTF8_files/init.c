@@ -258,7 +258,7 @@ STATIC CONST struct TagItem lib_managerTags[] =
 STATIC CONST struct TagItem mainTags[] =
 {
 	{ MIT_Name,			(Tag)"main"			},
-	{ MIT_VectorTable,	(Tag)main_vectors	},
+	{ MIT_VectorTable,	(Tag)main_v1_vectors	},
 	{ MIT_Version,		1					},
 	{ TAG_DONE,			0					}
 };
