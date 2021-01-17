@@ -1,4 +1,6 @@
 
+#define __USE_INLINE__
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -9,8 +11,6 @@
 #include <proto/locale.h>
 #include <proto/diskfont.h>
 #include <diskfont/diskfonttag.h>
-
-#define __USE_INLINE__
 
 #include <inline4/utf8.h>
 
@@ -23,16 +23,16 @@ uint32 codeset;
 
 void open_lib( const char *name, int ver , const char *iname, int iver, struct Library **base, struct Interface **interface)
 {
-	*base = IExec -> OpenLibrary( name , ver);
-	if (*base) *interface = IExec -> GetInterface( *base,  iname , iver, TAG_END );
+	*base = OpenLibrary( name , ver);
+	if (*base) *interface = GetInterface( *base,  iname , iver, TAG_END );
 }
 
 #define OpenLib( a, ver, iname, iver ) \
 	open_lib( #a ".Library",  ver ,  iname, iver, & a ## _base  , (struct a ## IFace *) &I ## a )
 
 #define CloseLIB( name ) \
-	if ( I##name) IExec -> DropInterface( (struct Interface *) I##name ); \
-	if ( name  ## _base) IExec -> CloseLibrary( name ## _base); \
+	if ( I##name) DropInterface( (struct Interface *) I##name ); \
+	if ( name  ## _base) CloseLibrary( name ## _base); \
 
 
 DefineLib( UTF8 );
@@ -53,10 +53,10 @@ int main(int nargs,char **args)
 
 	if ((ILocale)&&(IDiskfont)&&(IUTF8))
 	{
-		locale = ILocale->OpenLocale(NULL);
-		CHAR_CODES = (ULONG *) IDiskfont -> ObtainCharsetInfo(DFCS_NUMBER, (ULONG) locale -> loc_CodeSet , DFCS_MAPTABLE);
+		locale = OpenLocale(NULL);
+		CHAR_CODES = (ULONG *) ObtainCharsetInfo(DFCS_NUMBER, (ULONG) locale -> loc_CodeSet , DFCS_MAPTABLE);
 		ret = ami_main(nargs,args);
-		ILocale->CloseLocale(locale);
+		CloseLocale(locale);
 	}
 	else
 	{
@@ -72,34 +72,6 @@ int main(int nargs,char **args)
 	return ret;
 }
 
-unsigned char *Trim(unsigned char *txt, ULONG mem_flags)
-{
-	int _start =0;
-	int _end = -1;
-	int _len;
-
-	unsigned char *temp;
-	int n;
-	unsigned char c;
-
-	for (n=0;txt[n];n++)
-	{
-		c  = txt[n];
-
-		if ((c==0x20)&&(_end==-1)) _start=n+1;
-		if (c!=0x20) _end = n;
-	}
-	_len =_end-_start+1;
-
-	if (temp = IExec -> AllocVec( _len + 1, MEMF_CLEAR | mem_flags ))
-	{
-		IExec -> CopyMem( txt+_start, temp, _len );
-	}
-
-	return temp;
-}
-
-
 
 int ami_main(int nargs,char **args)
 {
@@ -109,7 +81,7 @@ int ami_main(int nargs,char **args)
 	ULONG ret;
 	char *txt;
 
-	ALPHABET_UTF8 =  IUTF8 -> Encode( CHAR_CODES, (char *) "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ", MEMF_PRIVATE ); 
+	ALPHABET_UTF8 =  Encode( CHAR_CODES, (char *) "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ", MEMF_PRIVATE ); 
 
 	// Just a test string in Norwegian ISO-8859-15
 	if (UTF8 = UTF8Trim( (unsigned char *) "  AAAAA ", MEMF_PRIVATE ))
@@ -118,7 +90,7 @@ int ami_main(int nargs,char **args)
 
 		if (NUTF8 = UTF8Remove(UTF8,1,3, MEMF_PRIVATE))
 		{
-			IExec->FreeVec(UTF8);
+			FreeVec(UTF8);
 			UTF8 = NUTF8;
 		}
 
@@ -126,7 +98,7 @@ int ami_main(int nargs,char **args)
 
 		if (NUTF8 = UTF8Insert(UTF8,1,"MIG", MEMF_PRIVATE))
 		{
-			IExec->FreeVec(UTF8);
+			FreeVec(UTF8);
 			UTF8 = NUTF8;
 		}
 
@@ -134,7 +106,7 @@ int ami_main(int nargs,char **args)
 
 		if (NUTF8 = UTF8Merge(MEMF_PRIVATE, UTF8," ","CAN"," ","DO"," ","IT",0))
 		{
-			IExec->FreeVec(UTF8);
+			FreeVec(UTF8);
 			UTF8 = NUTF8;
 		}
 
@@ -142,13 +114,13 @@ int ami_main(int nargs,char **args)
 
 		if (NUTF8 =UTF8Right(UTF8,5,MEMF_PRIVATE))
 		{
-			IExec->FreeVec(UTF8);
+			FreeVec(UTF8);
 			UTF8 = NUTF8;
 		}
 
 		if (NUTF8 = UTF8Merge(MEMF_PRIVATE, "AMIGA JUST ",UTF8,0))
 		{
-			IExec->FreeVec(UTF8);
+			FreeVec(UTF8);
 			UTF8 = NUTF8;
 		}
 
@@ -156,7 +128,7 @@ int ami_main(int nargs,char **args)
 
 		if (NUTF8 =UTF8Left(UTF8,5,MEMF_PRIVATE))
 		{
-			IExec->FreeVec(UTF8);
+			FreeVec(UTF8);
 			UTF8 = NUTF8;
 		}
 
@@ -164,20 +136,20 @@ int ami_main(int nargs,char **args)
 
 		if (NUTF8 = UTF8ToLower( UTF8,ALPHABET_UTF8, MEMF_PRIVATE))
 		{
-			IExec->FreeVec(UTF8);
+			FreeVec(UTF8);
 			UTF8 = NUTF8;
 		}
 		UTF8Printf(CHAR_CODES,(unsigned char *) "ToLower: -%s-\n",UTF8);
 
 		if (NUTF8 = UTF8ToUpper( UTF8,ALPHABET_UTF8, MEMF_PRIVATE))
 		{
-			IExec->FreeVec(UTF8);
+			FreeVec(UTF8);
 			UTF8 = NUTF8;
 		}
 		UTF8Printf(CHAR_CODES,(unsigned char *) "ToUpper: -%s-\n",UTF8);
 
 
-		IExec->FreeVec(UTF8);
+		FreeVec(UTF8);
 	}
 
 	return 0;
