@@ -1,4 +1,7 @@
 
+#include <proto/diskfont.h>
+#include <proto/graphics.h>
+
 struct Library *DOS_base;
 struct Library *Graphics_base;
 struct Library *Diskfont_base;
