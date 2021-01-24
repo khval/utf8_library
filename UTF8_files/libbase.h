@@ -2,9 +2,10 @@
 #include <proto/diskfont.h>
 #include <proto/graphics.h>
 
-struct Library *DOS_base;
-struct Library *Graphics_base;
-struct Library *Diskfont_base;
+struct Library *DOSBase;
+struct Library *NewLibBase;
+struct Library *GraphicsBase;
+struct Library *DiskfontBase;
 
 
 #ifdef __amigaos3__
@@ -18,8 +19,10 @@ struct Library *Diskfont_base;
 
 struct ExecIFace *IExec;
 struct DOSIFace *IDOS;
+struct NewLibIFace *INewlib;
 struct GraphicsIFace *IGraphics;
 struct DiskfontIFace *IDiskfont;
+
 #define sys_alloc(size,type) AllocVecTags(size,AVT_Type, type, TAG_END)
 #define sys_alloc_clear(size,type) AllocVecTags(size,AVT_Type,type,AVT_ClearWithValue,0,TAG_END)
 
