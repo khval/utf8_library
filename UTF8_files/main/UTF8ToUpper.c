@@ -62,7 +62,6 @@
 
 unsigned char * _UTF8_UTF8ToUpper(struct UTF8IFace *Self, unsigned char *alphabet_UTF8, unsigned char *UTF8, ULONG mem_flags )
 {
-//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	int alen = _UTF8_UTF8Length( Self, alphabet_UTF8 );
 	int halen = alen /2;
 	int len, n,a,pos = 0;
@@ -73,6 +72,7 @@ unsigned char * _UTF8_UTF8ToUpper(struct UTF8IFace *Self, unsigned char *alphabe
 	int size;
 	unsigned char *new_utf8;
 	ULONG glyph;
+	ULONG *ptr32;
 
 	ULONG *tempUTF32 = (ULONG *) alloca( sizeof(ULONG) * (tlen + 1) );
 	if (!tempUTF32) return FALSE;
@@ -92,21 +92,22 @@ unsigned char * _UTF8_UTF8ToUpper(struct UTF8IFace *Self, unsigned char *alphabe
 
 		tempUTF32[n] = glyph;
 	}
+	tempUTF32[tlen] = 0;
 
 	size = 1;
-	for (n=0;n<tlen;n++)
+	for (ptr32=tempUTF32;*ptr32;ptr32++)
 	{
-		len = _UTF8_UTF8EstimateByteSize( Self, tempUTF32[n] );
+		len = _UTF8_UTF8EstimateByteSize( Self, *ptr32 );
 		size += len;
 	}
 
-	new_utf8 = (unsigned char *) sys_alloc(size+100, mem_flags );
+	new_utf8 = (unsigned char *) sys_alloc(size, mem_flags );
 	if (new_utf8)
 	{
 		pos = 0;
-		for (n=0;n<tlen;n++)
+		for (ptr32=tempUTF32;*ptr32;ptr32++)
 		{
-			pos += _UTF8_UTF8SetGlyph( Self, tempUTF32[n], new_utf8 + pos );
+			pos += _UTF8_UTF8SetGlyph( Self, *ptr32, new_utf8 + pos );
 		}
 		new_utf8[pos] = 0;
 	}
