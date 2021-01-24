@@ -112,7 +112,6 @@ char * _UTF8_UTF8Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned ch
 				c++;
 			} while ( (len>0) && (ret > 0) );
 		}
-		*c = 0;	// term string
 	}
 	return new_str;
 }
@@ -167,7 +166,6 @@ char * _UTF8_UTF8DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned
 				c++;
 			} while ( (len>0) && (ret > 0) && (bytes>0) );
 		}
-		*c = 0;	// term string
 	}
 	return new_str;
 }
