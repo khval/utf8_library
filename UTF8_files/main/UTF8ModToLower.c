@@ -73,7 +73,7 @@ BOOL _UTF8_UTF8ModToLower(struct UTF8IFace *Self, unsigned char *alphabet_UTF8, 
 	unsigned char *new_utf8;
 	ULONG glyph;
 
-	ULONG *temp = (ULONG *) alloca( 5 * tlen +1 );		// alloc on stack becouse its fast...
+	ULONG *temp = (ULONG *) alloca( sizeof(LONG) * (tlen+1) );		// alloc on stack becouse its fast...
 	if (!temp) return FALSE;							// if we can assume alloced size smaller then requested 
 
 	for (n=0;n<tlen;n++)
@@ -91,6 +91,7 @@ BOOL _UTF8_UTF8ModToLower(struct UTF8IFace *Self, unsigned char *alphabet_UTF8, 
 
 		temp[n] = glyph;
 	}
+	temp[tlen] = 0;
 
 	size = 1;
 	for (n=0;n<tlen;n++)
@@ -99,7 +100,7 @@ BOOL _UTF8_UTF8ModToLower(struct UTF8IFace *Self, unsigned char *alphabet_UTF8, 
 		size += len;
 	}
 
-	new_utf8 = (unsigned char *) sys_alloc(size+100, mem_flags );
+	new_utf8 = (unsigned char *) sys_alloc(size+1, mem_flags );
 	if (new_utf8)
 	{
 		pos = 0;
@@ -109,7 +110,6 @@ BOOL _UTF8_UTF8ModToLower(struct UTF8IFace *Self, unsigned char *alphabet_UTF8, 
 		}
 		new_utf8[pos] = 0;
 
-		FreeVec(temp);
 		FreeVec(*UTF8);
 		*UTF8 = new_utf8;
 	}
