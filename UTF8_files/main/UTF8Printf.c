@@ -18,13 +18,21 @@
     USA
 */
 
+#ifdef __amigaos4__
 #include <exec/exec.h>
 #include <proto/exec.h>
-#include <proto/dos.h>
 #include <dos/dos.h>
 #include <exec/types.h>
 #include <libraries/UTF8.h>
 #include <proto/UTF8.h>
+#endif
+
+#if _MSC_VER
+#include "not_amiga.h"
+#endif // _MSC_VER
+
+#include <stdlib.h>
+#include <stdio.h>
 #include <stdarg.h>
 #include "../libbase.h"
 #include "../UTF8_vectors.h"
@@ -138,8 +146,13 @@ int get_format(  char *text,  char *buffer )
 void VARARGS68K _UTF8_UTF8Printf(struct UTF8IFace *Self,ULONG *codeset_page, unsigned char *utf8_fmt, ...)
 {
 	va_list list;
+
+
+
 	va_startlinear(list, utf8_fmt);
-//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
+
+	
+	//	struct _Library *libBase = (struct _Library *) Self -> Data.LibBase;
 	const char *fmt_list[]={"%s","%u","%d","%i","%lld","%f","%h", NULL};
 	char *fmt;
 	char fmt_buffer[6];

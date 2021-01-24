@@ -18,12 +18,19 @@
     USA
 */
 
+#ifdef __amigaos4__
 #include <exec/exec.h>
 #include <proto/exec.h>
 #include <dos/dos.h>
 #include <exec/types.h>
 #include <libraries/UTF8.h>
 #include <proto/UTF8.h>
+#endif
+
+#if _MSC_VER
+#include "not_amiga.h"
+#endif // _MSC_VER
+
 #include <stdarg.h>
 #include "../libBase.h"
 #include "../UTF8_vectors.h"
@@ -62,7 +69,7 @@ int _UTF8_UTF8EstimateByteSize(struct UTF8IFace *Self, ULONG glyph)
 	int bytes_to_bits[] = {7,11,16,21,26,31};
 
 	for (n = 0; n<6; n++)
-		if (glyph < (1<<bytes_to_bits[n]) ) return n+1;
+		if (glyph < (1u<<bytes_to_bits[n]) ) return n+1;
 
 	return 0;
 }

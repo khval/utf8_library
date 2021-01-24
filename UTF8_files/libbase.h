@@ -1,12 +1,21 @@
 
+
+#ifdef __amigaso4__
 #include <proto/diskfont.h>
 #include <proto/graphics.h>
+#endif
 
 struct Library *DOSBase;
 struct Library *NewLibBase;
 struct Library *GraphicsBase;
 struct Library *DiskfontBase;
 
+#ifdef _MSC_VER
+
+#define sys_alloc(size,type) free(size,type)
+#define sys_alloc_clear(size,type) malloc(size)
+
+#endif
 
 #ifdef __amigaos3__
 

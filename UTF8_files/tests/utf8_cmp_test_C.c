@@ -1,9 +1,21 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+
+#if _MSC_VER
+#include "not_amiga.h"
+#include "../UTF8_vectors.h"
+
+#define UTF8CaseCmp(UTF8_alphabet,UTF8_one,UTF8_two) _UTF8_UTF8CaseCmp( NULL, UTF8_alphabet, UTF8_one, UTF8_two)
+#define UTF8Cmp(UTF8_alphabet,STR1,STR2) _UTF8_UTF8Cmp( NULL, UTF8_alphabet, STR1, STR2)
+#define UTF8Encode(CHAR_CODES,UTF8,FLAGS) _UTF8_UTF8Encode(NULL,CHAR_CODES,UTF8,FLAGS)
+
+#endif // _MSC_VER
+
 
 #ifdef __amigaos4__
 #include "common4aos4.h"
@@ -13,11 +25,13 @@
 #include "common4aos3.h"
 #endif
 
+#ifdef __amigaos__
 #include <proto/exec.h>
 #include <proto/locale.h>
 #include <proto/diskfont.h>
 #include <diskfont/diskfonttag.h>
 #include <proto/utf8.h>
+#endif
 
 struct Locale *locale;
 uint32 codeset;
@@ -29,6 +43,8 @@ DefineLib( Diskfont );
 ULONG *CHAR_CODES;
 
 int ami_main(int nargs,char **args);
+
+#ifndef _MSC_VER
 
 int main(int nargs,char **args)
 {
@@ -71,6 +87,19 @@ int main(int nargs,char **args)
 	return 0;
 }
 
+#else
+
+// windows, test 
+
+int main(int nargs, char **args)
+{
+	int ret;
+	ret = ami_main(nargs, args);
+	return ret;
+}
+
+#endif
+
 void debug_Cmp(unsigned char *UTF8_alphabet,unsigned char *UTF8_one,  unsigned char *UTF8_two)
 {
 	int ret;
@@ -87,21 +116,23 @@ void debug_CaseCmp(unsigned char *UTF8_alphabet,unsigned char *UTF8_one,  unsign
 
 int ami_main(int nargs,char **args)
 {
-	unsigned char *UTF8;
-	ULONG ret;
-	char *txt;
+//	unsigned char *UTF8;
+//	ULONG ret;
+//	char *txt;
 	unsigned char *UTF8_strings[4];
 	unsigned char **PTR;
 	unsigned char *UTF8_alphabet;
 
 	// load it from a text in UTF8 format its better, if you have the wrong ISO (in Locale prefs) you see wrong symbols.
-	UTF8_alphabet =  UTF8Encode( CHAR_CODES, (char *) "abcdefghijklmnopqrstuvwxyzï¿½ï¿½ï¿½ABCDEFGHIJKLMNOPQRSTUVWXYZï¿½ï¿½ï¿½", MEMF_PRIVATE ); 
+	UTF8_alphabet =  UTF8Encode( CHAR_CODES, (char *) "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ", MEMF_PRIVATE ); 
 
-	UTF8_strings[0] = UTF8Encode(CHAR_CODES,"ï¿½",MEMF_PRIVATE);
-	UTF8_strings[1] = UTF8Encode(CHAR_CODES,"ï¿½",MEMF_PRIVATE);
-	UTF8_strings[2] = UTF8Encode(CHAR_CODES,"ï¿½",MEMF_PRIVATE);
+	UTF8_strings[0] = UTF8Encode(CHAR_CODES,"æ",MEMF_PRIVATE);
+	UTF8_strings[1] = UTF8Encode(CHAR_CODES,"ø",MEMF_PRIVATE);
+	UTF8_strings[2] = UTF8Encode(CHAR_CODES,"å",MEMF_PRIVATE);
 	UTF8_strings[3] = NULL;
 
+
+#if 1
 	printf("\n 7BIT ASCII / UTF8 \n");
 
 	debug_Cmp(UTF8_alphabet,"alfa","beta");
@@ -110,18 +141,20 @@ int ami_main(int nargs,char **args)
 	debug_Cmp(UTF8_alphabet,"ze","zeta");
 	debug_Cmp(UTF8_alphabet,"zeta","ze");
 
+#endif
+
 	printf("\n NOT UTF8 \n");
 
-	debug_Cmp(UTF8_alphabet,"ï¿½","ï¿½");
-	debug_Cmp(UTF8_alphabet,"ï¿½","ï¿½");
-	debug_Cmp(UTF8_alphabet,"ï¿½","a");
+	debug_Cmp(UTF8_alphabet,"æ","ø");
+	debug_Cmp(UTF8_alphabet,"ø","å");
+	debug_Cmp(UTF8_alphabet,"å","a");
 
 	printf("\n UTF8 \n");
 
-	debug_Cmp(UTF8_alphabet,"z",UTF8_strings[0]);  // cmp('z','ï¿½')
-	debug_Cmp(UTF8_alphabet,UTF8_strings[0],UTF8_strings[1]);  // cmp('ï¿½','ï¿½')
-	debug_Cmp(UTF8_alphabet,UTF8_strings[1],UTF8_strings[2]);  // cmp('ï¿½','ï¿½')
-	debug_Cmp(UTF8_alphabet,UTF8_strings[2],"a");  // cmp('ï¿½','ï¿½')
+	debug_Cmp(UTF8_alphabet,"z",UTF8_strings[0]);  // cmp('z','æ')
+	debug_Cmp(UTF8_alphabet,UTF8_strings[0],UTF8_strings[1]);  // cmp('æ','ø')
+	debug_Cmp(UTF8_alphabet,UTF8_strings[1],UTF8_strings[2]);  // cmp('ø','å')
+	debug_Cmp(UTF8_alphabet,UTF8_strings[2],"a");  // cmp('å','æ')
 
 	printf("\n UTF8 lowcase vs uppercase \n");
 
@@ -141,6 +174,7 @@ int ami_main(int nargs,char **args)
 
 	for (PTR=UTF8_strings;*PTR;PTR++)
 	{
+		printf(" FreeVec(%08x)\n", (unsigned int) *PTR);
 		FreeVec(*PTR);
 		*PTR=NULL;
 	}

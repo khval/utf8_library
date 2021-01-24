@@ -18,12 +18,19 @@
     USA
 */
 
+#ifdef __amigaos4__
 #include <exec/exec.h>
 #include <proto/exec.h>
 #include <dos/dos.h>
 #include <exec/types.h>
 #include <libraries/UTF8.h>
 #include <proto/UTF8.h>
+#endif
+
+#if _MSC_VER
+#include "not_amiga.h"
+#endif // _MSC_VER
+
 #include <stdarg.h>
 #include "../libbase.h"
 #include "../UTF8_vectors.h"
