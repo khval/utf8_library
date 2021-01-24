@@ -6,7 +6,7 @@ I have open sourced it, so more eyes can look at code, make sure its bug free,
 and contribute to it, if there anything might be useful.
 
 It’s under LGPL so if your making changes your supposed to contribute your changes back,
-you can distribute library. LGPL was choosen so you distribute with your commercial or game or program.
+you can distribute library. LGPL was choosen so you distribute with your commercial game or program.
 
 It can be rewritten for AROS, MorphOS, older AmigaOS 3.x.
 
