@@ -15,7 +15,10 @@ but I don’t wont to waste time on ports to other operating systems,
 so if anyone is interested the last mile you need to take it.
 
 The aim of this library is to provide similar features to standard functions in graphic library,
-but this one draws UTF8 text, the library allows you step glyphs one by one, merge and strings etc.
+This makes it easy update your custom gui’s to UTF8 standard.
+The library also allows you step glyphs one by one, merge, copy, cut utf8 strings.
+Its shared Amiga library, keeps you binaries small, and memory usage low.
+Alternatives are always sterically linked.
 
 The library also adopts the idea that strings might be shared or private, this is not common for strings.
 (It basically allows you to memory protect strings, but this only works for single treaded applications.
