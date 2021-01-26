@@ -1,6 +1,6 @@
 
 
-#ifdef __amigaso4__
+#ifdef __amigaos4__
 #include <proto/diskfont.h>
 #include <proto/graphics.h>
 #endif
@@ -14,6 +14,7 @@ struct Library *DiskfontBase;
 
 #define sys_alloc(size,type) free(size,type)
 #define sys_alloc_clear(size,type) malloc(size)
+#define sys_alloc(size) malloc(size)
 
 #endif
 

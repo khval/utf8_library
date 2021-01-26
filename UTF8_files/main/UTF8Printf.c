@@ -25,6 +25,7 @@
 #include <exec/types.h>
 #include <libraries/UTF8.h>
 #include <proto/UTF8.h>
+#include <proto/dos.h>
 #endif
 
 #if _MSC_VER
