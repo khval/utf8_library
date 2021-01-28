@@ -1,4 +1,7 @@
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -93,10 +96,9 @@ int ami_main(int nargs,char **args)
 	unsigned char *utf8;
 	unsigned char *txt;
 	int fd;
-	char org_txt[] = "dette er en test ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½!!!";
+	char org_txt[] = "dette er en test æøå ÆØÅ ¤!!!";
 
-
-	printf(" %08x, %08x \n",org_txt , CHAR_CODES );
+	printf(" %08x, %08x \n", (int) org_txt , (int) CHAR_CODES );
 
 	if (utf8 = UTF8Encode( CHAR_CODES, org_txt, MEMF_PRIVATE ))
 	{
@@ -105,7 +107,7 @@ int ami_main(int nargs,char **args)
 		utf8_dump(utf8);
 		printf("txt length %d\n",strlen(org_txt));
 
-		printf("utf8 length %d, utf8 size %d\n",UTF8Length( utf8 ),UTF8GetSize( utf8 ) );
+		printf("utf8 length %u, utf8 size %u\n", (unsigned int) UTF8Length( utf8 ),(unsigned int) UTF8GetSize( utf8 ) );
 
 		if (txt = UTF8Decode(  CHAR_CODES, utf8, MEMF_PRIVATE ))
 		{
@@ -115,12 +117,13 @@ int ami_main(int nargs,char **args)
 
 		if (fd = open( "ram:utf8.txt", O_CREAT | O_RDWR ))
 		{
-			write(fd,utf8,strlen(utf8) );
+			write(fd,utf8,strlen( (char *) utf8) );		// here strlen is returning bytes, not length.
 			close(fd);
 		}
 
 		FreeVec(utf8);
 	}
+	return 0;
 }
 
 
