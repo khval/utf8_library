@@ -1,6 +1,4 @@
 
-#define __USE_INLINE__
-
 #define DefineLib( a ) struct Library * a ## _base; struct a ## IFace *I ## a;
 
 #define CloseLIB( name ) \
