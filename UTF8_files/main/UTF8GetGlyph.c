@@ -64,6 +64,56 @@
 *
 */
 
+ULONG _UTF8_UTF8GetGlyph(struct UTF8IFace *Self,  unsigned char *utf8, int * len2)
+{
+	if (!(*utf8 & 0xC0))
+	{
+		*len2=1;
+		 return (ULONG) *utf8;
+	}
+	else
+	{
+		register unsigned int value;
+		register unsigned int len = 1;
+		struct u8l *xbyte;
+		struct u8l *header = u8_b1 + (*utf8);
+		register int hlen = header -> len;
+
+		if (hlen)
+		{
+			value = header -> value;
+
+			while (--hlen)
+			{
+				utf8++;	// get next byte..
+				xbyte= u8_b2 + (*utf8);
+
+				if (xbyte -> len == 1)	// branch prediction expected
+				{
+					value = (value << 6)  | xbyte -> value;
+					len++;
+					continue;
+				}
+				else	// not expected
+				{
+					*len2=0;
+					return 0;	
+				}
+			}
+	
+			*len2 = len;
+			return value;
+		}
+		else
+		{
+			*len2=0;
+			return 0;
+		}
+	}
+}
+
+
+/*
 ULONG _UTF8_UTF8GetGlyph(struct UTF8IFace *Self,  unsigned char *utf8, int * len)
 {
 	unsigned char *c;
@@ -114,4 +164,4 @@ ULONG _UTF8_UTF8GetGlyph(struct UTF8IFace *Self,  unsigned char *utf8, int * len
 
 	return ret;
 }
-
+*/
