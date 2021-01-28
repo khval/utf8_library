@@ -63,13 +63,21 @@
 *
 */
 
+#define b1_value (1u<<7)	// ASCII
+#define b2_value (1u<<11)	// 5bit + 6bit			// 2 bits = 2 bytes, 1 bit space , 3 bit used.
+#define b3_value (1u<<16)	// 4bit + 6bit + 6bit 
+#define b4_value (1u<<21)	// 3bit + 6bit + 6bit + 6bit
+#define b5_value (1u<<26)	// 2bit + 6bit + 6bit + 6bit + 6bit
+#define b6_value (1u<<31)	// 1bit + 6bit + 6bit + 6bit + 6bit + 6bit
+
 int _UTF8_UTF8EstimateByteSize(struct UTF8IFace *Self, ULONG glyph)
 {
- 	int n;
-	int bytes_to_bits[] = {7,11,16,21,26,31};
-
-	for (n = 0; n<6; n++)
-		if (glyph < (1u<<bytes_to_bits[n]) ) return n+1;
+	if (glyph < b1_value ) return 1;
+	if (glyph < b2_value ) return 2;
+	if (glyph < b3_value ) return 3;
+	if (glyph < b4_value ) return 4;
+	if (glyph < b5_value ) return 5;
+	if (glyph < b6_value ) return 6;
 
 	return 0;
 }
