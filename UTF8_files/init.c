@@ -32,6 +32,9 @@ STATIC CONST UBYTE USED verstag[] = VERSTAG;
 
 struct ExecIFace *IExec  = NULL;
 
+struct u8l u8_b1[256];
+struct u8l u8_b2[256];
+
 /*
  * The system (and compiler) rely on a symbol named _start which marks
  * the beginning of execution of an ELF file. To prevent others from 
@@ -135,6 +138,48 @@ STATIC APTR libExpunge(struct LibraryManagerInterface *Self)
 }
 
 
+void init_table()
+{
+	int n,nn,prefix,cnt;
+	int v;
+	bzero( u8_b1, sizeof(u8_b1) );
+	bzero( u8_b2, sizeof(u8_b2) );
+
+	// setup first byte in UTF8...
+
+	// 0..127	// ASCII
+	for (n=0;n<128;n++) 
+	{
+		u8_b1[n].len = 1;
+		u8_b1[n].value = n;
+	}
+
+	// valid extended ranges...
+	for (n=2;n<7;n++)
+	{
+		prefix = ((1u<<n)-1) << (8 -n);		// bit prefix == number of bytes
+		cnt = (1u<<(7-n))-1;				// range = 0...x
+
+		for ( v= 0 ; v<= cnt ; v++ ) 
+		{
+			nn = prefix | v;
+			u8_b1[nn].len = n;
+			u8_b1[nn].value = v;
+		}
+	}
+
+	// setup byte x in utf8 glyph... there is only one valid range..
+
+	// valid extended ranges...  
+	for (n=0;n<=0x3F;n++)
+	{
+		nn = 0x80 | n;
+		u8_b2[nn].len = 1;
+		u8_b2[nn].value = n;
+	}
+}
+
+
 /* The ROMTAG Init Function */
 STATIC struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interface *exec)
 {
@@ -189,7 +234,6 @@ STATIC struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct
 		IGraphics = (struct GraphicsIFace *) IExec->GetInterface( GraphicsBase,"main", 1, NULL);
 	} 
 
-
 	if (!( (DOSBase) && (NewLibBase) && (DiskfontBase) && (GraphicsBase) ) )
 	{
 		if (!IDOS) IExec->DebugPrintF("UTF8.library: can't open DOS.library version 53\n");
@@ -200,8 +244,9 @@ STATIC struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct
 		return NULL;
 	}
 
+	init_table();
 
-       return (struct Library *)libBase;
+	return (struct Library *)libBase;
 }
 
 /* ------------------- Manager Interface ------------------------ */

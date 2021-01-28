@@ -46,3 +46,13 @@ struct _Library
 	int MainCnt;
 };
 
+
+struct u8l
+{
+	unsigned char len;		// expected or current length
+	unsigned char value;	// the value of data, in the package, first byte has variable length, 2en,3rd,4th byte etc. is 6 bits.
+};
+
+extern struct u8l u8_b1[256];
+extern struct u8l u8_b2[256];
+
