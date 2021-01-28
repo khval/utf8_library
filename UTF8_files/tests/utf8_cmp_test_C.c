@@ -118,51 +118,51 @@ int ami_main(int nargs,char **args)
 	unsigned char *UTF8_alphabet;
 
 	// load it from a text in UTF8 format its better, if you have the wrong ISO (in Locale prefs) you see wrong symbols.
-	UTF8_alphabet =  UTF8Encode( CHAR_CODES, (char *) "abcdefghijklmnopqrstuvwxyzï¿½ï¿½ï¿½ABCDEFGHIJKLMNOPQRSTUVWXYZï¿½ï¿½ï¿½", MEMF_PRIVATE ); 
+	UTF8_alphabet =  UTF8Encode( CHAR_CODES, (char *) "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ", MEMF_PRIVATE ); 
 
-	UTF8_strings[0] = UTF8Encode(CHAR_CODES,"ï¿½",MEMF_PRIVATE);
-	UTF8_strings[1] = UTF8Encode(CHAR_CODES,"ï¿½",MEMF_PRIVATE);
-	UTF8_strings[2] = UTF8Encode(CHAR_CODES,"ï¿½",MEMF_PRIVATE);
+	UTF8_strings[0] = UTF8Encode(CHAR_CODES,"æ",MEMF_PRIVATE);
+	UTF8_strings[1] = UTF8Encode(CHAR_CODES,"ø",MEMF_PRIVATE);
+	UTF8_strings[2] = UTF8Encode(CHAR_CODES,"å",MEMF_PRIVATE);
 	UTF8_strings[3] = NULL;
 
 
 #if 1
 	printf("\n 7BIT ASCII / UTF8 \n");
 
-	debug_Cmp(UTF8_alphabet,"alfa","beta");
-	debug_Cmp(UTF8_alphabet,"beta","alfa");
-	debug_Cmp(UTF8_alphabet,"alfa","alfa");
-	debug_Cmp(UTF8_alphabet,"ze","zeta");
-	debug_Cmp(UTF8_alphabet,"zeta","ze");
+	debug_Cmp(UTF8_alphabet,(unsigned char *) "alfa",(unsigned char *) "beta");
+	debug_Cmp(UTF8_alphabet,(unsigned char *) "beta",(unsigned char *) "alfa");
+	debug_Cmp(UTF8_alphabet,(unsigned char *) "alfa",(unsigned char *) "alfa");
+	debug_Cmp(UTF8_alphabet,(unsigned char *) "ze",(unsigned char *) "zeta");
+	debug_Cmp(UTF8_alphabet,(unsigned char *) "zeta",(unsigned char *) "ze");
 
 #endif
 
 	printf("\n NOT UTF8 \n");
 
-	debug_Cmp(UTF8_alphabet,"ï¿½","ï¿½");
-	debug_Cmp(UTF8_alphabet,"ï¿½","ï¿½");
-	debug_Cmp(UTF8_alphabet,"ï¿½","a");
+	debug_Cmp(UTF8_alphabet,(unsigned char *) "æ",(unsigned char *) "ø");
+	debug_Cmp(UTF8_alphabet,(unsigned char *) "ø",(unsigned char *) "å");
+	debug_Cmp(UTF8_alphabet,(unsigned char *) "å",(unsigned char *) "a");
 
 	printf("\n UTF8 \n");
 
-	debug_Cmp(UTF8_alphabet,"z",UTF8_strings[0]);  // cmp('z','ï¿½')
-	debug_Cmp(UTF8_alphabet,UTF8_strings[0],UTF8_strings[1]);  // cmp('ï¿½','ï¿½')
-	debug_Cmp(UTF8_alphabet,UTF8_strings[1],UTF8_strings[2]);  // cmp('ï¿½','ï¿½')
-	debug_Cmp(UTF8_alphabet,UTF8_strings[2],"a");  // cmp('ï¿½','ï¿½')
+	debug_Cmp(UTF8_alphabet,(unsigned char *) "z",UTF8_strings[0]);  // cmp('z','æ')
+	debug_Cmp(UTF8_alphabet,UTF8_strings[0],UTF8_strings[1]);  // cmp('æ','ø')
+	debug_Cmp(UTF8_alphabet,UTF8_strings[1],UTF8_strings[2]);  // cmp('ø','å')
+	debug_Cmp(UTF8_alphabet,UTF8_strings[2],(unsigned char *) "a");  // cmp('å','æ')
 
 	printf("\n UTF8 lowcase vs uppercase \n");
 
-	debug_Cmp(UTF8_alphabet,"a","A");  
-	debug_Cmp(UTF8_alphabet,"Z","z");  
+	debug_Cmp(UTF8_alphabet,(unsigned char *) "a",(unsigned char *) "A");  
+	debug_Cmp(UTF8_alphabet,(unsigned char *) "Z",(unsigned char *) "z");  
 
 	printf("\n UTF8 casecmp lowcase vs uppercase \n");
 
-	debug_CaseCmp(UTF8_alphabet,"a","A");  
-	debug_CaseCmp(UTF8_alphabet,"Z","z");  
-	debug_CaseCmp(UTF8_alphabet,"a","b");  
-	debug_CaseCmp(UTF8_alphabet,"b","a");  
-	debug_CaseCmp(UTF8_alphabet,"A","B");  
-	debug_CaseCmp(UTF8_alphabet,"B","A");  
+	debug_CaseCmp(UTF8_alphabet, (unsigned char *) "a",(unsigned char *) "A");  
+	debug_CaseCmp(UTF8_alphabet, (unsigned char *) "Z",(unsigned char *) "z");  
+	debug_CaseCmp(UTF8_alphabet, (unsigned char *) "a",(unsigned char *) "b");  
+	debug_CaseCmp(UTF8_alphabet, (unsigned char *) "b",(unsigned char *) "a");  
+	debug_CaseCmp(UTF8_alphabet, (unsigned char *) "A",(unsigned char *) "B");  
+	debug_CaseCmp(UTF8_alphabet, (unsigned char *) "B",(unsigned char *) "A");  
 
 	printf("\n Free UTF8 strings \n");
 
