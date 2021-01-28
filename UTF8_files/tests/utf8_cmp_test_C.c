@@ -44,7 +44,6 @@ int ami_main(int nargs,char **args);
 int main(int nargs,char **args)
 {
 	int ret;
-	unsigned char n;
 
 	Locale_base = OpenLibrary("locale.library", 53);
 	Diskfont_base = OpenLibrary("diskfont.library", 53);
@@ -119,11 +118,11 @@ int ami_main(int nargs,char **args)
 	unsigned char *UTF8_alphabet;
 
 	// load it from a text in UTF8 format its better, if you have the wrong ISO (in Locale prefs) you see wrong symbols.
-	UTF8_alphabet =  UTF8Encode( CHAR_CODES, (char *) "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ", MEMF_PRIVATE ); 
+	UTF8_alphabet =  UTF8Encode( CHAR_CODES, (char *) "abcdefghijklmnopqrstuvwxyzï¿½ï¿½ï¿½ABCDEFGHIJKLMNOPQRSTUVWXYZï¿½ï¿½ï¿½", MEMF_PRIVATE ); 
 
-	UTF8_strings[0] = UTF8Encode(CHAR_CODES,"æ",MEMF_PRIVATE);
-	UTF8_strings[1] = UTF8Encode(CHAR_CODES,"ø",MEMF_PRIVATE);
-	UTF8_strings[2] = UTF8Encode(CHAR_CODES,"å",MEMF_PRIVATE);
+	UTF8_strings[0] = UTF8Encode(CHAR_CODES,"ï¿½",MEMF_PRIVATE);
+	UTF8_strings[1] = UTF8Encode(CHAR_CODES,"ï¿½",MEMF_PRIVATE);
+	UTF8_strings[2] = UTF8Encode(CHAR_CODES,"ï¿½",MEMF_PRIVATE);
 	UTF8_strings[3] = NULL;
 
 
@@ -140,16 +139,16 @@ int ami_main(int nargs,char **args)
 
 	printf("\n NOT UTF8 \n");
 
-	debug_Cmp(UTF8_alphabet,"æ","ø");
-	debug_Cmp(UTF8_alphabet,"ø","å");
-	debug_Cmp(UTF8_alphabet,"å","a");
+	debug_Cmp(UTF8_alphabet,"ï¿½","ï¿½");
+	debug_Cmp(UTF8_alphabet,"ï¿½","ï¿½");
+	debug_Cmp(UTF8_alphabet,"ï¿½","a");
 
 	printf("\n UTF8 \n");
 
-	debug_Cmp(UTF8_alphabet,"z",UTF8_strings[0]);  // cmp('z','æ')
-	debug_Cmp(UTF8_alphabet,UTF8_strings[0],UTF8_strings[1]);  // cmp('æ','ø')
-	debug_Cmp(UTF8_alphabet,UTF8_strings[1],UTF8_strings[2]);  // cmp('ø','å')
-	debug_Cmp(UTF8_alphabet,UTF8_strings[2],"a");  // cmp('å','æ')
+	debug_Cmp(UTF8_alphabet,"z",UTF8_strings[0]);  // cmp('z','ï¿½')
+	debug_Cmp(UTF8_alphabet,UTF8_strings[0],UTF8_strings[1]);  // cmp('ï¿½','ï¿½')
+	debug_Cmp(UTF8_alphabet,UTF8_strings[1],UTF8_strings[2]);  // cmp('ï¿½','ï¿½')
+	debug_Cmp(UTF8_alphabet,UTF8_strings[2],"a");  // cmp('ï¿½','ï¿½')
 
 	printf("\n UTF8 lowcase vs uppercase \n");
 

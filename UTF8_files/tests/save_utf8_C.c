@@ -34,7 +34,6 @@ int ami_main(int nargs,char **args);
 int main(int nargs,char **args)
 {
 	int ret;
-	unsigned char n;
 
 	Locale_base = OpenLibrary("locale.library", 53);
 	Diskfont_base = OpenLibrary("diskfont.library", 53);
@@ -94,7 +93,7 @@ int ami_main(int nargs,char **args)
 	unsigned char *utf8;
 	unsigned char *txt;
 	int fd;
-	char org_txt[] = "dette er en test æøå ÆØÅ ¤!!!";
+	char org_txt[] = "dette er en test ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½!!!";
 
 
 	printf(" %08x, %08x \n",org_txt , CHAR_CODES );

@@ -33,8 +33,6 @@ int ami_main(int nargs,char **args);
 int main(int nargs,char **args)
 {
 	int ret;
-	unsigned char n;
-
 	Locale_base = OpenLibrary("locale.library", 53);
 	Diskfont_base = OpenLibrary("diskfont.library", 53);
 	UTF8_base = OpenLibrary("UTF8.library", VER);
@@ -75,8 +73,6 @@ int main(int nargs,char **args)
 int ami_main(int nargs,char **args)
 {
 	unsigned char *UTF8;
-	ULONG ret;
-	char *txt;
 	int n;
 
 	// Just a test string in Norwegian ISO-8859-15

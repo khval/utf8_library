@@ -35,7 +35,6 @@ int ami_main(int nargs,char **args);
 int main(int nargs,char **args)
 {
 	int ret;
-	unsigned char n;
 
 	Locale_base = OpenLibrary("locale.library", 53);
 	Diskfont_base = OpenLibrary("diskfont.library", 53);
@@ -77,8 +76,6 @@ int main(int nargs,char **args)
 int ami_main(int nargs,char **args)
 {
 	unsigned char *UTF8;
-	ULONG ret;
-	char *txt;
 
 	// Just a test string in ASCII 7bit => UTF8 (7bit) is TRUE, UTF8 (8bit) != ASCII 7BIT
 	UTF8 = UTF8Remove( (unsigned char * ) "This is a test", 4, 5, MEMF_PRIVATE );
