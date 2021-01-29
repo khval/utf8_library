@@ -6,7 +6,7 @@ copy UTF8.ReadMe Package
 makedir package/SDK
 makedir package/SDK/include
 makedir package/SDK/include/include_h
-copy include package/SDK/include/include_h all
+copy /include package/SDK/include/include_h all
 
 ; Autodocs
 makedir package/SDK/Autodocs
