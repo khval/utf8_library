@@ -1,7 +1,7 @@
 
 Short:	Encode/Decode or manipulate UTF8 text strings.
 Author:	Kjetil Hvalstrand
-Version:	6
+Version:	7
 Requires:	AmigaOS4.X
 
 Description:
@@ -23,11 +23,14 @@ Requirements:
 
 Known issues:
 
-	UTF8->Printf() is not included in the C++ class yet.
+	UTF8->UTF8Printf() is not included in the C++ class yet.
 	
 License:
 
-	Currently close source, none commercial software, (Freeware).
+	LGPL, use the library in your projects, you can contribute to it.
+	changes should be committed to repo.
+
+	https://github.com/khval/utf8_library
 
 Distribution:
 
@@ -35,11 +38,11 @@ Distribution:
 
 Warning: 
 
-	This is Library is under development things might change, 
-	or not be backwards compatible, it has not been tested a lot, 
 	some unknown bugs might exist.
 
-	Send a PM on www.Amigans.net / LiveForIt if you find bugs.
+	Reports bugs to:
+	https://github.com/khval/utf8_library/issues
+
 
 Alternatives:
 
@@ -49,6 +52,14 @@ Alternatives:
 	AmigaOS does not already support.
 
 Changes:
+
+29.01.2021 -- version 7
+
+	* A lot function renamed
+	* Removed lot of function pointers in the code (slow)
+	* Moved dos,graphics,etc moved out libbase (no indirects, no mess), 
+		now code works with -D__USE_INLINE__
+	* Optimized UTF8GetGlyph(...) and UTF8EstimateByteSize(...)
 
 14.02.2016 -- version 6
 
