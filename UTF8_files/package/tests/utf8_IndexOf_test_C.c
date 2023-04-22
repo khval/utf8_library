@@ -2,14 +2,15 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
 #include <stdio.h>
 #include <string.h>
+
+#define __USE_INLINE__
+
 #include <proto/exec.h>
 #include <proto/locale.h>
 #include <proto/diskfont.h>
 #include <diskfont/diskfonttag.h>
-
 #include <proto/utf8.h>
 
 #undef Length
@@ -21,16 +22,16 @@ uint32 codeset;
 
 void open_lib( const char *name, int ver , const char *iname, int iver, struct Library **base, struct Interface **interface)
 {
-	*base = IExec -> OpenLibrary( name , ver);
-	if (*base) *interface = IExec -> GetInterface( *base,  iname , iver, TAG_END );
+	*base = OpenLibrary( name , ver);
+	if (*base) *interface = GetInterface( *base,  iname , iver, TAG_END );
 }
 
 #define OpenLib( a, ver, iname, iver ) \
 	open_lib( #a ".Library",  ver ,  iname, iver, & a ## _base  , (struct a ## IFace *) &I ## a )
 
 #define CloseLIB( name ) \
-	if ( I##name) IExec -> DropInterface( (struct Interface *) I##name ); \
-	if ( name  ## _base) IExec -> CloseLibrary( name ## _base); \
+	if ( I##name)  DropInterface( (struct Interface *) I##name ); \
+	if ( name  ## _base) CloseLibrary( name ## _base); \
 
 
 DefineLib( UTF8 );
@@ -51,10 +52,10 @@ int main(int nargs,char **args)
 
 	if ((ILocale)&&(IDiskfont)&&(IUTF8))
 	{
-		locale = ILocale->OpenLocale(NULL);
-		CHAR_CODES = (ULONG *) IDiskfont -> ObtainCharsetInfo(DFCS_NUMBER, (ULONG) locale -> loc_CodeSet , DFCS_MAPTABLE);
+		locale = OpenLocale(NULL);
+		CHAR_CODES = (ULONG *) ObtainCharsetInfo(DFCS_NUMBER, (ULONG) locale -> loc_CodeSet , DFCS_MAPTABLE);
 		ret = ami_main(nargs,args);
-		ILocale->CloseLocale(locale);
+		CloseLocale(locale);
 	}
 	else
 	{
@@ -78,20 +79,20 @@ int ami_main(int nargs,char **args)
 	char *txt;
 
 	// Just a test string in Norwegian ISO-8859-15
-	UTF8 = IUTF8 -> Encode( CHAR_CODES, (char *) "Hello World זרו", MEMF_PRIVATE ); 
+	UTF8 = UTF8Encode( CHAR_CODES, (char *) "Hello World זרו", MEMF_PRIVATE ); 
 
 	// Remeber 7Bit ASCII == UTF8bit,  UTF8 != 7bit ASCII.
 
-	ret =IUTF8 -> IndexOf( UTF8, (unsigned char *) "ello" );
+	ret =UTF8IndexOf( UTF8, (unsigned char *) "ello" );
 	printf("found at %d\n",ret);
 
-	ret =IUTF8->IndexOf( UTF8, (unsigned char *) "World" );
+	ret =UTF8IndexOf( UTF8, (unsigned char *) "World" );
 	printf("found at %d\n",ret);
 
-	ret =IUTF8->IndexOf( UTF8, (unsigned char *) "not found" );
+	ret =UTF8IndexOf( UTF8, (unsigned char *) "not found" );
 	printf("not found returns %d\n",ret);
 
-	if (UTF8) IExec->FreeVec(UTF8);
+	if (UTF8) FreeVec(UTF8);
 
 	return 0;
 }

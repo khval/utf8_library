@@ -2,9 +2,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
 #include <stdio.h>
 #include <string.h>
+
+#define __USE_INLINE__
+
 #include <proto/exec.h>
 #include <proto/locale.h>
 #include <proto/diskfont.h>
@@ -21,16 +23,16 @@ uint32 codeset;
 
 void open_lib( const char *name, int ver , const char *iname, int iver, struct Library **base, struct Interface **interface)
 {
-	*base = IExec -> OpenLibrary( name , ver);
-	if (*base) *interface = IExec -> GetInterface( *base,  iname , iver, TAG_END );
+	*base = OpenLibrary( name , ver);
+	if (*base) *interface = GetInterface( *base,  iname , iver, TAG_END );
 }
 
 #define OpenLib( a, ver, iname, iver ) \
 	open_lib( #a ".Library",  ver ,  iname, iver, & a ## _base  , (struct a ## IFace *) &I ## a )
 
 #define CloseLIB( name ) \
-	if ( I##name) IExec -> DropInterface( (struct Interface *) I##name ); \
-	if ( name  ## _base) IExec -> CloseLibrary( name ## _base); \
+	if ( I##name)  DropInterface( (struct Interface *) I##name ); \
+	if ( name  ## _base) CloseLibrary( name ## _base); \
 
 
 DefineLib( UTF8 );
@@ -52,10 +54,10 @@ int main(int nargs,char **args)
 
 	if ((ILocale)&&(IDiskfont)&&(IUTF8))
 	{
-		locale = ILocale->OpenLocale(NULL);
-		CHAR_CODES = (ULONG *) IDiskfont -> ObtainCharsetInfo(DFCS_NUMBER, (ULONG) locale -> loc_CodeSet , DFCS_MAPTABLE);
+		locale = OpenLocale(NULL);
+		CHAR_CODES = (ULONG *) ObtainCharsetInfo(DFCS_NUMBER, (ULONG) locale -> loc_CodeSet , DFCS_MAPTABLE);
 		ret = ami_main(nargs,args);
-		ILocale->CloseLocale(locale);
+		CloseLocale(locale);
 	}
 	else
 	{
@@ -86,33 +88,33 @@ int ami_main(int nargs,char **args)
 	size = 0;
 	for (n=0;n<31;n++)
 	{
-		len = IUTF8->EstimateByteSize( 1<<n );
+		len = UTF8EstimateByteSize( 1<<n );
 		size += len;
 	}
 	printf("size needed %d\n", size);
 
-	buffer = (unsigned char *) IExec -> AllocVec(size+1, MEMF_CLEAR );
+	buffer = (unsigned char *) AllocVec(size+1, MEMF_CLEAR );
 
 	// create a bad utf8 string
 	pos = 0;
 	for (n=0;n<31;n++)
 	{
-		pos += IUTF8->SetGlyph( 1<<n, buffer + pos );
+		pos += UTF8SetGlyph( 1<<n, buffer + pos );
 	}
 	buffer[pos] = 0;
 
-	for ( pos = 0; pos < IUTF8->Length( buffer )  ; pos++)
+	for ( pos = 0; pos < UTF8Length( buffer )  ; pos++)
 	{
-		ret = IUTF8->GetGlyphAt( buffer, pos, &len) ;
+		ret = UTF8GetGlyphAt( buffer, pos, &len) ;
 		printf("%02x: %d\n",len, ret);
 		if ((ret ==0) || (len == 0)) break;
 	} 
 
-	printf("UTF8 string %d long\n", IUTF8->Length(buffer) );
+	printf("UTF8 string %d long\n", UTF8Length(buffer) );
 
 	printf("ASCII hex dump\n");
 	n = 0;
-	ascii = (char *) IUTF8 -> Decode( CHAR_CODES,  buffer,  MEMF_PRIVATE );
+	ascii = (char *) UTF8Decode( CHAR_CODES,  buffer,  MEMF_PRIVATE );
 	if (ascii)
 	{
 		for (c = ascii;*c;c++)
@@ -121,12 +123,12 @@ int ami_main(int nargs,char **args)
 			printf("%02X ",*c);
 		}
 		printf("\n");
-		IExec -> FreeVec(ascii);
+		FreeVec(ascii);
 	}
 
 	printf("char string is %d long\n", n);
 
-	IExec -> FreeVec(buffer);
+	FreeVec(buffer);
 
 }
 
