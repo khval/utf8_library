@@ -18,19 +18,30 @@
 #include <proto/exec.h>
 #include <dos/dos.h>
 #include <exec/types.h>
+#include <newlib.h>
 #include <libraries/UTF8.h>
 #include <proto/UTF8.h>
 #include <stdarg.h>
+#include <string.h>
 
 #include "UTF8.library_rev.h"
 
 /* Version Tag */
 //include "UTF8.library_rev.h"
-STATIC CONST UBYTE USED verstag[] = VERSTAG;
+STATIC CONST UBYTE USED *verstag = (const UBYTE*) VERSTAG;
 
 #include "libbase.h"
 
-struct ExecIFace *IExec  = NULL;
+struct Library *DOSBase = NULL;
+struct Library *NewLibBase = NULL;
+struct Library *GraphicsBase = NULL;
+struct Library *DiskfontBase = NULL;
+
+struct ExecIFace *IExec = NULL;
+struct DOSIFace *IDOS = NULL;
+struct NewLibIFace *INewlib = NULL;
+struct GraphicsIFace *IGraphics = NULL;
+struct DiskfontIFace *IDiskfont = NULL;
 
 struct u8l u8_b1[256];
 struct u8l u8_b2[256];
@@ -137,13 +148,18 @@ STATIC APTR libExpunge(struct LibraryManagerInterface *Self)
     return result;
 }
 
+void _memset( char *ptr, char n, int size )
+{
+	for (ptr; size; size --) *ptr = n;
+}
+
 
 void init_table()
 {
 	int n,nn,prefix,cnt;
 	int v;
-	bzero( u8_b1, sizeof(u8_b1) );
-	bzero( u8_b2, sizeof(u8_b2) );
+	_memset( (char*) u8_b1, 0, sizeof(u8_b1) );
+	_memset( (char*) u8_b2, 0, sizeof(u8_b2) );
 
 	// setup first byte in UTF8...
 
@@ -187,11 +203,11 @@ STATIC struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct
 
     libBase->libNode.lib_Node.ln_Type = NT_LIBRARY;
     libBase->libNode.lib_Node.ln_Pri  = 0;
-    libBase->libNode.lib_Node.ln_Name = "UTF8.library";
+    libBase->libNode.lib_Node.ln_Name = (STRPTR) "UTF8.library";
     libBase->libNode.lib_Flags        = LIBF_SUMUSED|LIBF_CHANGED;
     libBase->libNode.lib_Version      = VERSION;
     libBase->libNode.lib_Revision     = REVISION;
-    libBase->libNode.lib_IdString     = VSTRING;
+    libBase->libNode.lib_IdString     = (STRPTR) VSTRING;
 
     IExec = (struct ExecIFace *)exec;
 
@@ -219,7 +235,7 @@ STATIC struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct
 	if (NewLibBase)
 	{
 		IExec ->DebugPrintF("UTF8.library: opened newlib.library version 53\n");
-		INewlib = (struct DOSIFace *) IExec->GetInterface( NewLibBase,"main", 1, NULL);
+		INewlib = (NewLibIFace*) IExec->GetInterface( NULL /*NewLibBase*/,"main", 1, NULL);
 	} 
 
 	if (DiskfontBase)

@@ -60,8 +60,6 @@
 *
 */
 
-
-
 unsigned char * VARARGS68K _UTF8_UTF8Merge(struct UTF8IFace *Self,ULONG mem_flag, ...)
 {
 	va_list list;

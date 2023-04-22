@@ -57,7 +57,6 @@
 *
 */
 
-
 unsigned char * _UTF8_UTF8Copy(struct UTF8IFace *Self,unsigned char *UTF8, ULONG mem_flags )
 {
 	int size;

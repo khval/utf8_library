@@ -5,10 +5,10 @@
 #include <proto/graphics.h>
 #endif
 
-struct Library *DOSBase;
-struct Library *NewLibBase;
-struct Library *GraphicsBase;
-struct Library *DiskfontBase;
+extern struct Library *DOSBase;
+extern struct Library *NewLibBase;
+extern struct Library *GraphicsBase;
+extern struct Library *DiskfontBase;
 
 #ifdef _MSC_VER
 
@@ -27,11 +27,11 @@ struct Library *DiskfontBase;
 
 #ifdef __amigaos4__
 
-struct ExecIFace *IExec;
-struct DOSIFace *IDOS;
-struct NewLibIFace *INewlib;
-struct GraphicsIFace *IGraphics;
-struct DiskfontIFace *IDiskfont;
+extern struct ExecIFace *IExec;
+extern struct DOSIFace *IDOS;
+extern struct NewLibIFace *INewlib;
+extern struct GraphicsIFace *IGraphics;
+extern struct DiskfontIFace *IDiskfont;
 
 #define sys_alloc(size,type) AllocVecTags(size,AVT_Type, type, TAG_END)
 #define sys_alloc_clear(size,type) AllocVecTags(size,AVT_Type,type,AVT_ClearWithValue,0,TAG_END)

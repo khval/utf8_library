@@ -58,11 +58,11 @@ clean:
 	$(RM) $(TARGET) $(OBJS)
 
 init.o: init.c libbase.h UTF8.library_rev.h UTF8_vectors.c ../include/interfaces/UTF8.h
-	gcc  -Wall -O3  -Iinclude    -c -o init.o init.c
+	$(CXX)  -Wall -O3  -Iinclude -fpermissive -c -o init.o init.c
 
 
 %.o:		%.c
-	gcc  -Wall -O3  $(INC) $(DEBUG) -c  -D__USE_INLINE__ -D__no_stdlib__ $(@:.o=.c) -o $@
+	$(CXX)  -Wall -O3  $(INC) $(DEBUG) -c  -D__USE_INLINE__ -D__no_stdlib__ $(@:.o=.c) -o $@
 
 
 .PHONY: revision

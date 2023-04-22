@@ -65,7 +65,6 @@
 *
 */
 
-
 char * _UTF8_UTF8Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned char * UTF8, ULONG flags )
 {
 	char *c;
@@ -80,7 +79,7 @@ char * _UTF8_UTF8Decode(struct UTF8IFace *Self, ULONG *codeset_page, unsigned ch
 
 	DebugPrintF(" _UTF8_UTF8Decode UTF8 string len = %d \n", size);  
 
-	new_str =  sys_alloc_clear(size, flags);
+	new_str =  (char *) sys_alloc_clear(size, flags);
 	if (new_str)
 	{
 		c = new_str;
@@ -130,7 +129,7 @@ char * _UTF8_UTF8DecodeLen(struct UTF8IFace *Self, ULONG *codeset_page, unsigned
 
 	DebugPrintF(" _UTF8_Decode UTF8 string size = %d \n", size);  
 
-	new_str =  sys_alloc(size,flags);	
+	new_str = (char *)  sys_alloc(size,flags);	
 
 	if (new_str)
 	{

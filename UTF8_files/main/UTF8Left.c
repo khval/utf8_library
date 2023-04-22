@@ -58,7 +58,6 @@
 *
 */
 
-
 unsigned char * _UTF8_UTF8Left(struct UTF8IFace *Self,
 		unsigned char *UTF8, int _len, ULONG flags )
 {

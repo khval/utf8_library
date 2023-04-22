@@ -64,7 +64,6 @@
 *
 */
 
-
 int _UTF8_UTF8CaseCmp(struct UTF8IFace *Self, unsigned char *UTF8_alphabet, unsigned char *UTF8_one,  unsigned char *UTF8_two)
 {
 	int pos_one =0, pos_two = 0, len;

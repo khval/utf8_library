@@ -64,7 +64,6 @@
 *
 */
 
-
 unsigned char * _UTF8_UTF8Encode(struct UTF8IFace *Self, ULONG *codeset_page, char * ascii, ULONG mem_flags)
 {
 	unsigned char *c;
@@ -78,7 +77,7 @@ unsigned char * _UTF8_UTF8Encode(struct UTF8IFace *Self, ULONG *codeset_page, ch
 		for (c = (unsigned char *) ascii; *c ; c++ )
 			size += _UTF8_UTF8EstimateByteSize( Self, *c );
 
-		utf8 = sys_alloc(size,  mem_flags );
+		utf8 = (unsigned char *) sys_alloc(size,  mem_flags );
 		if (utf8)
 		{
 			pos = 0;
@@ -93,7 +92,7 @@ unsigned char * _UTF8_UTF8Encode(struct UTF8IFace *Self, ULONG *codeset_page, ch
 		for (c = (unsigned char *) ascii; *c ; c++ )
 			size += _UTF8_UTF8EstimateByteSize( Self, codeset_page[  *c ] );
 
-		utf8 = sys_alloc(size, mem_flags );
+		utf8 = (unsigned char *) sys_alloc(size, mem_flags );
 		if (utf8)
 		{
 			pos = 0;
